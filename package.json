@@ -10,7 +10,9 @@
     "cz-conventional-changelog": "3.2.0",
     "eslint": "7.5.0",
     "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-jest-dom": "^3.1.6",
     "eslint-plugin-prettier": "3.1.4",
+    "eslint-plugin-testing-library": "^3.4.1",
     "husky": "4.2.5",
     "lerna": "3.22.1",
     "lint-staged": "^10.2.11",
@@ -30,9 +32,11 @@
     ]
   },
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "start": "lerna run --parallel start",
     "clean": "lerna run clean",
     "build": "lerna run build",
+    "test": "lerna run test",
     "lint": "eslint --fix \"**/*.ts\""
   },
   "config": {
