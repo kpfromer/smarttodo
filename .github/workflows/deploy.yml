@@ -40,7 +40,7 @@ jobs:
           CI: true
 
       - name: Test
-        return: yarn test
+        run: yarn test
         env:
           # NODE_ENV: testing
           CI: true
