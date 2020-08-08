@@ -39,6 +39,11 @@ jobs:
           NODE_ENV: production
           CI: true
 
-      - name: Deploy Frontend
-        run: cd packages/frontend && npx surge ./public --token ${{
-        secrets.SURGE_TOKEN }}
+      - name: Test
+        return: yarn test
+        env:
+          # NODE_ENV: testing
+          CI: true
+      # - name: Deploy Frontend
+      #   run: cd packages/frontend && npx surge ./public --token ${{
+      #   secrets.SURGE_TOKEN }}
