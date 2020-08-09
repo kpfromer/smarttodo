@@ -24,7 +24,8 @@
     "clean": "lerna run clean",
     "build": "lerna run build",
     "test": "lerna run test",
-    "lint": "eslint --fix \"**/*.ts\""
+    "lint": "eslint --fix \"**/*.ts\"",
+    "postinstall": "yarn bootstrap && yarn build"
   },
   "config": {
     "commitizen": {
@@ -47,5 +48,6 @@
       "eslint --fix",
       "prettier --write"
     ]
-  }
+  },
+  "dependencies": {}
 }
