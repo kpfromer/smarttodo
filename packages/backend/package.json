@@ -6,6 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon",
+    "build": "tsc",
+    "start:prod": "pm2-runtime start ecosystem.config.js --env production",
     "test": "jest"
   },
   "dependencies": {
