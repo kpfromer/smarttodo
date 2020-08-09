@@ -47,3 +47,10 @@ jobs:
       # - name: Deploy Frontend
       #   run: cd packages/frontend && npx surge ./public --token ${{
       #   secrets.SURGE_TOKEN }}
+      - uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: 'smarttodo-api'
+          heroku_email: 'kpfromer2@gmail.com'
+          appdir: 'packages/backend'
+          procfile: 'web: npm run start:prod'
