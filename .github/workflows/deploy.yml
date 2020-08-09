@@ -57,5 +57,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: 'smarttodo-api'
           heroku_email: 'kpfromer2@gmail.com'
-          appdir: 'packages/backend'
-          procfile: 'web: npm run start:prod'
+          procfile: 'web: npx pm2-runtime start packages/backend/ecosystem.config.js --env production'
