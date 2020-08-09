@@ -1,8 +1,11 @@
+/* eslint-disable */
+const path = require('path');
+
 module.exports = {
   apps: [
     {
       name: 'index',
-      script: './lib/index.js',
+      script: path.join(__dirname, 'lib/index.js'),
       instances: 'max',
       exec_mode: 'cluster',
       env: {
