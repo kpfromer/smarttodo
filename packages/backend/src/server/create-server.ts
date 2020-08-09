@@ -15,6 +15,7 @@ export const createApolloServer = async () => {
     schema: await buildSchema({
       resolvers: [UserResolver, ProjectResolver, TodoResolver],
       authChecker,
+      // Not using class-validator currently
       validate: false
     }),
     context: async ({ req, res }) => {
@@ -30,6 +31,7 @@ export const createApolloServer = async () => {
           )
         }
       } as ContextType;
-    }
+    },
+    introspection: true
   });
 };
