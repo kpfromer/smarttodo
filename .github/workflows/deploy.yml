@@ -45,8 +45,8 @@ jobs:
           # NODE_ENV: testing
           CI: true
 
-      - name: Deploy Frontend
-        run: npx surge packages/frontend/public --token ${{secrets.SURGE_TOKEN}}
+      # - name: Deploy Frontend
+      #   run: npx surge packages/frontend/public --token ${{secrets.SURGE_TOKEN}}
 
       - run: git config user.email "kpfromer2@gmail.com"
       - run: git config user.name "Kyle Pfromer"
