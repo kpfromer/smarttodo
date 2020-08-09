@@ -47,6 +47,8 @@ jobs:
       # - name: Deploy Frontend
       #   run: cd packages/frontend && npx surge ./public --token ${{
       #   secrets.SURGE_TOKEN }}
+      - run: git config user.email "kpfromer2@gmail.com"
+      - run: git config user.name "Kyle Pfromer"
       - uses: akhileshns/heroku-deploy@v3.4.6
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
