@@ -11,6 +11,11 @@ export async function createConnection(): Promise<void> {
 
   switch (config.get('environment')) {
     case 'production':
+      await connect(config.get('db.uri'), {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        dbName: 'smarttodo'
+      });
       break;
     default: {
       const uri = await mongod.getUri();

@@ -3,6 +3,9 @@ import convict from 'convict';
 interface Config {
   environment: 'production' | 'development';
   port: number;
+  db: {
+    uri: string;
+  };
   jwt: {
     access: { secret: string; duration: string };
     refresh: { secret: string; duration: string };
@@ -21,6 +24,15 @@ export const config = convict<Config>({
     format: 'port',
     default: 4000,
     env: 'PORT'
+  },
+  db: {
+    uri: {
+      sensitive: true,
+      doc: 'The mongodb uri.',
+      format: String,
+      default: 'does-not-matter-for-dev',
+      env: 'MONGODB_URI'
+    }
   },
   jwt: {
     refresh: {
