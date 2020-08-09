@@ -18,21 +18,6 @@
     "lint-staged": "^10.2.11",
     "prettier": "2.0.5"
   },
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ],
-    "nohoist": [
-      "**/graphql",
-      "**/graphql/**",
-      "**/apollo-server-express",
-      "**/apollo-server-express/**",
-      "**/@graphql-codegen",
-      "**/@graphql-codegen**",
-      "**/@apollographql",
-      "**/@apollographql**"
-    ]
-  },
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "start": "lerna run --parallel start",
