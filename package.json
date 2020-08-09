@@ -28,7 +28,9 @@
       "**/apollo-server-express",
       "**/apollo-server-express/**",
       "**/@graphql-codegen",
-      "**/@graphql-codegen**"
+      "**/@graphql-codegen**",
+      "**/@apollographql",
+      "**/@apollographql**"
     ]
   },
   "scripts": {
