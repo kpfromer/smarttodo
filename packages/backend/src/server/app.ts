@@ -12,7 +12,13 @@ export const createApp = async () => {
 
   apolloServer.applyMiddleware({
     app,
-    cors: { credentials: true, origin: 'http://localhost:8000' }
+    cors: {
+      credentials: true,
+      origin:
+        config.get('environment') === 'production'
+          ? 'https://todo.kpfromer.com'
+          : 'http://localhost:8000'
+    }
   });
 
   return app;
