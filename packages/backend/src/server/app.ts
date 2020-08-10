@@ -1,7 +1,7 @@
-import { createConnection } from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { createApolloServer } from './create-server';
 import express from 'express';
+import { config } from '../config';
 
 export const createApp = async () => {
   const app = express();
