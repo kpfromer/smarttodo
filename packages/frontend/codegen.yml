@@ -1,0 +1,21 @@
+overwrite: true
+schema:
+  - 'https://api.todo.kpfromer.com/graphql'
+  - 'src/utils/schema/local.graphql'
+documents: 'src/utils/schema/operation.graphql'
+generates:
+  src/generated/types-and-hooks.tsx:
+    config:
+      # https://github.com/dotansimha/graphql-code-generator/issues/2869#issuecomment-552848894
+      gqlImport: '@apollo/client#gql'
+      apolloReactCommonImportFrom: '@apollo/client'
+      apolloReactComponentsImportFrom: '@apollo/client'
+      apolloReactHocImportFrom: '@apollo/client'
+      apolloReactHooksImportFrom: '@apollo/client'
+      withHooks: true
+      withComponent: false
+      withHOC: false
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo

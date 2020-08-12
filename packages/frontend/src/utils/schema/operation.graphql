@@ -1,0 +1,82 @@
+# Local
+
+query loginToken {
+  token @client
+}
+
+# Server
+
+## Authentication
+
+mutation refresh {
+  refresh
+}
+
+mutation login($email: String!, $password: String!, $rememberMe: Boolean) {
+  login(email: $email, password: $password, rememberMe: $rememberMe)
+}
+
+mutation register($email: String!, $password: String!) {
+  createUser(email: $email, password: $password)
+}
+
+## Todos
+
+fragment TodoFields on Todo {
+  id
+  name
+  completed
+  description
+}
+
+fragment ProjectFields on Project {
+  id
+  name
+  color
+  todos {
+    id
+    name
+    completed
+    description
+  }
+}
+
+query getAllProjectsAndTodos {
+  defaultProject {
+    ...ProjectFields
+  }
+  projects {
+    ...ProjectFields
+  }
+}
+
+mutation updateTodo(
+  $id: ID!
+  $name: String
+  $completed: Boolean
+  $description: String
+) {
+  updateTodo(
+    id: $id
+    options: { completed: $completed, name: $name, description: $description }
+  ) {
+    ...TodoFields
+  }
+}
+
+mutation createTodo(
+  $projectId: ID!
+  $name: String!
+  $description: String
+  $completed: Boolean!
+) {
+  createTodo(
+    project: $projectId
+    options: { name: $name, description: $description, completed: $completed }
+  ) {
+    id
+    name
+    description
+    completed
+  }
+}
