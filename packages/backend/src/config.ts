@@ -47,7 +47,7 @@ export const config = convict<Config>({
         doc: 'How long the access token lasts for.',
         format: String,
         default: '7d',
-        env: 'ACCESS_JWT_DURATION'
+        env: 'REFRESH_JWT_DURATION'
       }
     },
     access: {
@@ -56,13 +56,13 @@ export const config = convict<Config>({
         format: String,
         default: 'access-secret',
         sensitive: true,
-        env: 'REFRESH_JWT_SECRET'
+        env: 'ACCESS_JWT_SECRET'
       },
       duration: {
         doc: 'How long the access token lasts for.',
         format: String,
         default: '15m',
-        env: 'REFRESH_JWT_DURATION'
+        env: 'ACCESS_JWT_DURATION'
       }
     }
   }
