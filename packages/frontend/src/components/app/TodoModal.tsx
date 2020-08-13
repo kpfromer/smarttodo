@@ -4,7 +4,7 @@ import {
   TodoFieldsFragment,
   ProjectFieldsFragment
 } from '../../generated/types-and-hooks';
-import { Modal } from '../useModal';
+import { Modal } from '../Modal';
 import { Flex, Box, Text } from 'rebass';
 import { Label, Checkbox, Input } from '@rebass/forms';
 import { useForm } from 'react-hook-form';
