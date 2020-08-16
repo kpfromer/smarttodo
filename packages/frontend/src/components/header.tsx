@@ -2,6 +2,7 @@ import React from 'react';
 import { Flex, Box, Heading } from 'rebass';
 import { Link } from './link';
 import { useLoginTokenQuery } from '../generated/types-and-hooks';
+import { logout } from '../utils/logout';
 
 export const Header: React.FC = () => {
   const { data } = useLoginTokenQuery();
@@ -19,9 +20,14 @@ export const Header: React.FC = () => {
 
         <Flex ml="auto" alignItems="center">
           {loggedIn ? (
-            <Link variant="nav" to="/app/">
-              Todo
-            </Link>
+            <>
+              <Link variant="nav" to="/app/" mr={3}>
+                Todo
+              </Link>
+              <Box variant="nav" onClick={logout}>
+                Logout
+              </Box>
+            </>
           ) : (
             <>
               <Link variant="nav" to="/register" mr={3}>
