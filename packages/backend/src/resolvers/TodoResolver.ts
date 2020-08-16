@@ -59,6 +59,7 @@ export class TodoResolver {
       ...options,
       updated: new Date(),
       created: new Date(),
+      projectId: project.id,
       userId: me!.id
     });
 
@@ -81,6 +82,37 @@ export class TodoResolver {
         { $set: options },
         { new: true }
       );
+      if (todo) {
+        return todo.toJSON({ virtuals: true });
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  @Authorized()
+  @Mutation(() => Todo, { nullable: true })
+  async deleteTodo(
+    @Ctx('me') me: { id: string },
+    @Arg('id', () => ID) todoId: string
+  ) {
+    try {
+      const todo = await TodoModel.findOneAndDelete({
+        _id: todoId,
+        userId: me.id
+      });
+
+      // remove todo from projects that have it
+      await ProjectModel.updateMany(
+        {
+          todoIds: { $in: [todo?.id] }
+        },
+        {
+          $pull: { todoIds: todo?.id }
+        }
+      );
+
       if (todo) {
         return todo.toJSON({ virtuals: true });
       }

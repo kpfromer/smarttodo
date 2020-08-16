@@ -2,8 +2,7 @@ import {
   MockMongooseReturn,
   createMockDatabase,
   createMockUser,
-  createMockProject,
-  createMockTodo
+  createMockProject
 } from '../../test/utils';
 import { User } from '../../model/User';
 import supertest from 'supertest';
@@ -29,16 +28,24 @@ describe('Todo resolver', () => {
       email: 'example@email.com',
       password: 'password123'
     });
-    todo = await createMockTodo(user.id, {
-      name: 'Existing todo',
-      description: 'WoooW',
-      completed: true
-    });
-    project = await createMockProject(user.id, {
-      name: 'New Project',
-      color: '#1244ff',
-      todoIds: [todo.id]
-    });
+
+    ({
+      project,
+      todos: [todo]
+    } = await createMockProject(
+      user.id,
+      {
+        name: 'New Project',
+        color: '#1244ff'
+      },
+      [
+        {
+          name: 'Existing todo',
+          description: 'WoooW',
+          completed: true
+        }
+      ]
+    ));
     // Login
     const res = await request
       .post('/graphql')
@@ -177,6 +184,85 @@ describe('Todo resolver', () => {
               }
             }
       `
+        })
+        .expect(200);
+
+      expect(res.body.errors).toHaveLength(1);
+      expect(res.body.errors[0].message).toMatchInlineSnapshot(
+        `"Access denied! You need to be authorized to perform this action!"`
+      );
+    });
+  });
+
+  describe('deleteTodo', () => {
+    it('deletes a todo', async () => {
+      const todoId = todo.id;
+
+      const res = await request
+        .post('/graphql')
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('authorization', accessToken)
+        .send({
+          query: `
+          mutation {
+            deleteTodo(id: "${todoId}") {
+              id
+              name
+              description
+              completed
+            }
+          }
+    `
+        })
+        .expect(200);
+
+      expect(res.body.data.deleteTodo).toEqual({
+        id: todo.id,
+        name: todo.name,
+        description: todo.description,
+        completed: true
+      });
+
+      // Should not present for todos
+      const secondDeleteRes = await request
+        .post('/graphql')
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('authorization', accessToken)
+        .send({
+          query: `
+          mutation {
+            deleteTodo(id: "${todoId}") {
+              id
+              name
+              description
+              completed
+            }
+          }
+    `
+        })
+        .expect(200);
+
+      expect(secondDeleteRes.body.data.deleteTodo).toBeNull();
+    });
+
+    it('shows error message if not authenticated', async () => {
+      const res = await request
+        .post('/graphql')
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .send({
+          query: `
+          mutation {
+            deleteTodo(id: "${todo.id}") {
+              id
+              name
+              description
+              completed
+            }
+          }
+    `
         })
         .expect(200);
 

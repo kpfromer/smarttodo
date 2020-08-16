@@ -3,6 +3,7 @@ import { Field, ID, ObjectType } from 'type-graphql';
 import { DateMetadata } from './DateMetadata';
 import { UserMetadata } from './UserMetadata';
 import { User } from './User';
+import { Project } from './Project';
 
 @ObjectType({ implements: [DateMetadata, UserMetadata] })
 export class Todo implements DateMetadata, UserMetadata {
@@ -20,6 +21,9 @@ export class Todo implements DateMetadata, UserMetadata {
   @Field({ nullable: true })
   @prop()
   description?: string;
+
+  @prop({ required: true, ref: 'Project' })
+  projectId!: Ref<Project>;
 
   @prop({ required: true })
   created!: Date;

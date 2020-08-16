@@ -55,24 +55,35 @@ export const createMockUser = async ({
 
 export const createMockProject = async (
   userId: string,
-  project: Pick<Project, 'name' | 'color'> & { todoIds?: any[] }
+  project: Pick<Project, 'name' | 'color'>,
+  todos: Pick<Todo, 'name' | 'description' | 'completed'>[] = []
 ) => {
-  return await ProjectModel.create({
+  const projectItem = await ProjectModel.create({
     ...project,
     userId,
-    todoIds: project.todoIds ? project.todoIds : [],
+    todoIds: [],
     created: new Date(),
     updated: new Date()
   });
+
+  const todoItems = await Promise.all(
+    todos.map(
+      async (todo) => await createMockTodo(userId, projectItem.id, todo)
+    )
+  );
+
+  return { project: projectItem, todos: todoItems };
 };
 
 export const createMockTodo = async (
   userId: string,
+  projectId: string,
   todo: Pick<Todo, 'name' | 'description' | 'completed'>
 ) => {
   return await TodoModel.create({
     ...todo,
     userId,
+    projectId,
     created: new Date(),
     updated: new Date()
   });

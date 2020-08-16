@@ -41,12 +41,22 @@ export async function createConnection(): Promise<void> {
 
       await user.updateOne({ $set: { defaultProject: defaultProject.id } });
 
+      const project = await ProjectModel.create({
+        name: 'Stuff',
+        color: '#189e33',
+        updated: new Date(),
+        created: new Date(),
+        todoIds: [],
+        userId: user.id
+      });
+
       const todo1 = await TodoModel.create({
         name: 'School',
         completed: false,
         description: 'Homework',
         updated: new Date(),
         created: new Date(),
+        projectId: project.id,
         userId: user.id
       });
 
@@ -55,16 +65,14 @@ export async function createConnection(): Promise<void> {
         completed: true,
         updated: new Date(),
         created: new Date(),
+        projectId: project.id,
         userId: user.id
       });
 
-      await ProjectModel.create({
-        name: 'Stuff',
-        color: '#189e33',
-        updated: new Date(),
-        created: new Date(),
-        todoIds: [todo1.id, todo2.id],
-        userId: user.id
+      await project.updateOne({
+        $set: {
+          todoIds: [todo1.id, todo2.id]
+        }
       });
     }
   }
