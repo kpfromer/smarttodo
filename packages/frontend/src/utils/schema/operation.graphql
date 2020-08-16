@@ -84,3 +84,9 @@ mutation createTodo(
     completed
   }
 }
+
+mutation deleteTodo($todoId: ID!) {
+  deleteTodo(id: $todoId) {
+    id
+  }
+}

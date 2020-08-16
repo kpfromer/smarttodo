@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from '@reach/router';
-import { useLoginTokenQuery } from '../generated/types-and-hooks';
+import { useLoginTokenQuery } from '../../generated/types-and-hooks';
 
 export const PrivateRoute = ({ component: Component, location, ...rest }) => {
   const { data } = useLoginTokenQuery();

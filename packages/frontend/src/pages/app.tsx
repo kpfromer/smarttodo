@@ -1,16 +1,13 @@
 import React from 'react';
 import { Router } from '@reach/router';
-import { Layout } from '../components/layout/layout';
-import { PrivateRoute } from '../components/private-route';
+import { PrivateRoute } from '../components/misc/private-route';
 import { Todo } from '../components/app/todo';
 
 const App = () => {
   return (
-    <Layout>
-      <Router basepath="/app">
-        <PrivateRoute path="/" component={Todo} />
-      </Router>
-    </Layout>
+    <Router basepath="/app">
+      <PrivateRoute path="/" component={Todo} />
+    </Router>
   );
 };
 export default App;
