@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout } from '../components/layout';
+import { Layout } from '../components/layout/layout';
 import { Label, Input, Checkbox } from '@rebass/forms';
 import { Box, Text, Button } from 'rebass';
 import { useForm } from 'react-hook-form';

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useRegisterMutation } from '../generated/types-and-hooks';
 import { token } from '../store/cache';
 import { navigate } from 'gatsby';
-import { Layout } from '../components/layout';
+import { Layout } from '../components/layout/layout';
 import { Label, Input } from '@rebass/forms';
 
 interface Inputs {

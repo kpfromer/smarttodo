@@ -1,8 +1,8 @@
 import React from 'react';
 import { Flex, Box, Heading } from 'rebass';
-import { Link } from './link';
-import { useLoginTokenQuery } from '../generated/types-and-hooks';
-import { logout } from '../utils/logout';
+import { Link } from '../misc/link';
+import { useLoginTokenQuery } from '../../generated/types-and-hooks';
+import { logout } from '../../utils/logout';
 
 export const Header: React.FC = () => {
   const { data } = useLoginTokenQuery();
