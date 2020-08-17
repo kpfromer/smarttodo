@@ -26,6 +26,8 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "lint": "eslint --fix \"**/*.ts\"",
+    "build:backend": "lerna run build --scope=@smarttodo/backend",
+    "heroku-postbuild": "yarn bootstrap && yarn build:backend",
     "postinstall": "yarn bootstrap && yarn build"
   },
   "config": {
