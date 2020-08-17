@@ -56,5 +56,5 @@ jobs:
           heroku_email: 'kpfromer2@gmail.com'
           procfile: 'web: node packages/backend/lib/index.js'
 
-          - name: Deploy Frontend
-          run: npx surge packages/frontend/public --token ${{secrets.SURGE_TOKEN}}
+      - name: Deploy Frontend
+        run: npx surge packages/frontend/public --token ${{secrets.SURGE_TOKEN}}
