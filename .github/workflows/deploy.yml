@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -33,14 +33,51 @@ jobs:
         run: yarn install && yarn bootstrap
 
       - name: Build
-        run: yarn build
+        run: yarn build:frontend
         env:
           # GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES: true
           NODE_ENV: production
           CI: true
 
       - name: Test
-        run: yarn test
+        run: yarn test:frontend
+        env:
+          CI: true
+
+      - name: Deploy Frontend
+        run: npx surge packages/frontend/public --token ${{secrets.SURGE_TOKEN}}
+
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set Node.js
+        uses: actions/setup-node@master
+        with:
+          node-version: 10.x
+
+      - name: Yarn cache directory
+        id: yarn-cache-dir
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Yarn cache
+        uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build:backend
+
+      - name: Test
+        run: yarn test:backend
         env:
           # NODE_ENV: testing
           CI: true
@@ -55,6 +92,3 @@ jobs:
           heroku_app_name: 'smarttodo-api'
           heroku_email: 'kpfromer2@gmail.com'
           procfile: 'web: node packages/backend/lib/index.js'
-
-      - name: Deploy Frontend
-        run: npx surge packages/frontend/public --token ${{secrets.SURGE_TOKEN}}
