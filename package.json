@@ -26,8 +26,8 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "lint": "eslint --fix \"**/*.ts\"",
-    "build:frontend": "lerna run test --scope=@smarttodo/frontend",
-    "test:frontend": "lerna run build --scope=@smarttodo/frontend",
+    "build:frontend": "lerna run build --scope=@smarttodo/frontend",
+    "test:frontend": "lerna run test --scope=@smarttodo/frontend",
     "test:backend": "lerna run test --scope=@smarttodo/backend",
     "build:backend": "lerna run build --scope=@smarttodo/backend",
     "heroku-postbuild": "yarn bootstrap && yarn build:backend"
@@ -39,7 +39,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn test",
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn test",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
