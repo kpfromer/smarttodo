@@ -13,8 +13,8 @@ const heading = {
 export const theme = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body: 'Roboto, sans-serif',
-    heading: 'Overpass, sans-serif'
+    body: `'Open Sans', sans-serif`,
+    heading: `'Poppins', sans-serif`
     // monospace: "Menlo, monospace",
   },
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
@@ -104,6 +104,12 @@ export const theme = {
     img: {
       maxWidth: '100%'
     }
+  },
+  shadows: {
+    small: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
+    medium: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
+    large: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
+    sidebar: '10px 0 20px 0 rgba(0,0,0,0.30);'
   },
   // custom user variants
   container: {

@@ -8,17 +8,20 @@ import {
   useUpdateTodoMutation,
   TodoFieldsFragment,
   ProjectFieldsFragment,
-  useDeleteTodoMutation,
-  Project
+  useDeleteTodoMutation
 } from '../../generated/types-and-hooks';
 import { Input } from '@rebass/forms';
 import { Dot } from '../misc/Dot';
 import { TodoModal } from './TodoModal';
-import { Header } from '../layout/header';
+import { Header } from './header';
 import { Sidebar, SidebarBody, SidebarContainer } from '../layout/sidebar';
 import { useForm } from 'react-hook-form';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaBars, FaCog } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
+import { useSpring, animated } from 'react-spring';
+import { lighten } from '@theme-ui/color';
+
+const AnimatedSidebarBody = animated(SidebarBody);
 
 const TodoItem: React.FC<{
   project: ProjectFieldsFragment;
@@ -45,7 +48,16 @@ const TodoItem: React.FC<{
   });
   return (
     <Box>
-      <Flex>
+      <Flex
+        sx={{
+          '& .showOnHover': {
+            visibility: 'hidden'
+          },
+          '&:hover .showOnHover': {
+            visibility: 'visible'
+          }
+        }}
+      >
         <Box>
           <Label>
             <Checkbox
@@ -75,6 +87,7 @@ const TodoItem: React.FC<{
           {todo.name}
         </Text>
         <Box
+          className="showOnHover"
           mr={1}
           onClick={() => deleteTodo({ variables: { todoId: todo.id } })}
         >
@@ -156,6 +169,15 @@ const CreateTodo: React.FC<{ project: ProjectFieldsFragment }> = ({
 };
 
 export const Todo: React.FC = () => {
+  const headerSize = 50;
+  const sidebarSize = 300;
+  const lighterBackground = lighten('background', 0.025);
+  const { theme } = useThemeUI();
+  // TODO: Change if in mobile
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const sidebarProps = useSpring({
+    marginLeft: sidebarOpen ? `${sidebarSize}px` : `0px`
+  });
   const [projectId, setProjectId] = useState<undefined | string>(undefined);
 
   const { loading, data } = useGetAllProjectsAndTodosQuery({
@@ -175,14 +197,75 @@ export const Todo: React.FC = () => {
 
   if (loading) return <Text>Loading</Text>;
   return (
-    <Box>
-      <Header />
+    <Flex sx={{ minHeight: '100vh' }} flexDirection="column">
+      <Header
+        color="text"
+        bg="primary"
+        height={headerSize}
+        px={3}
+        left={
+          <>
+            <IconContext.Provider
+              value={{
+                style: { verticalAlign: 'middle' },
+                color: theme.colors?.text
+              }}
+            >
+              <FaBars onClick={() => setSidebarOpen(!sidebarOpen)} />
+            </IconContext.Provider>
+          </>
+        }
+        right={
+          <>
+            <IconContext.Provider
+              value={{
+                style: { verticalAlign: 'middle' },
+                color: theme.colors?.text
+              }}
+            >
+              <FaCog />
+            </IconContext.Provider>
+          </>
+        }
+      />
 
       {loading ? (
         <Text>Loading</Text>
       ) : (
-        <SidebarContainer mt={3}>
-          <Sidebar>
+        <SidebarContainer size={sidebarSize} sx={{ flexGrow: 1 }}>
+          <AnimatedSidebarBody style={sidebarProps} sx={{ flexGrow: 1 }}>
+            {!!currentProject && (
+              <Box
+                pt={3}
+                px={3}
+                sx={{
+                  flexGrow: 1,
+                  position: 'relative',
+                  zIndex: 10,
+                  bg: 'background'
+                }}
+              >
+                <Heading mb={2}>{currentProject.name}</Heading>
+
+                {currentProject.todos.map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    project={currentProject}
+                    todo={todo}
+                    onClick={() => setOpen(todo.id)}
+                  />
+                ))}
+                <CreateTodo project={currentProject} />
+              </Box>
+            )}
+          </AnimatedSidebarBody>
+
+          <Sidebar
+            headerSize={headerSize}
+            pt={3}
+            px={3}
+            sx={{ bg: lighterBackground }}
+          >
             <Text fontWeight="bold">Projects</Text>
             <Divider />
 
@@ -207,33 +290,15 @@ export const Todo: React.FC = () => {
               </Flex>
             ))}
           </Sidebar>
-
-          <SidebarBody px={3}>
-            {!!currentProject && (
-              <>
-                <Heading mb={2}>{currentProject.name}</Heading>
-
-                {currentProject.todos.map((todo) => (
-                  <TodoItem
-                    key={todo.id}
-                    project={currentProject}
-                    todo={todo}
-                    onClick={() => setOpen(todo.id)}
-                  />
-                ))}
-                <CreateTodo project={currentProject} />
-              </>
-            )}
-          </SidebarBody>
-          {!!currentTodo && !!currentProject && (
-            <TodoModal
-              project={currentProject}
-              todo={currentTodo}
-              onClose={() => setOpen(undefined)}
-            />
-          )}
         </SidebarContainer>
       )}
-    </Box>
+      {!!currentTodo && !!currentProject && (
+        <TodoModal
+          project={currentProject}
+          todo={currentTodo}
+          onClose={() => setOpen(undefined)}
+        />
+      )}
+    </Flex>
   );
 };

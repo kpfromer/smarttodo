@@ -8,8 +8,8 @@ export const logout = async (): Promise<void> => {
       mutation: LogoutDocument
     });
     localStorage.setItem('loggedIn', 'false');
-    token(undefined);
   } catch {
-    console.warn('Failed to logout.');
+    console.warn('Failed to logout with api.');
   }
+  token(undefined);
 };
