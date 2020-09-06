@@ -26,6 +26,7 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "lint": "eslint --fix \"**/*.ts\"",
+    "generate": "lerna run generate",
     "build:frontend": "lerna run build --scope=@smarttodo/frontend",
     "test:frontend": "lerna run test --scope=@smarttodo/frontend",
     "test:backend": "lerna run test --scope=@smarttodo/backend",
