@@ -7,6 +7,7 @@ import { useLoginMutation } from '../generated/types-and-hooks';
 import { token } from '../store/cache';
 import { useHistory } from 'react-router-dom';
 import { routes } from '../routes';
+import SEO from '../components/misc/seo';
 
 interface Inputs {
   email: string;
@@ -34,44 +35,47 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3}>
-        {!!error && <Text color="red">{error.message}</Text>}
-        <Box>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            ref={register({ required: true })}
-          />
-        </Box>
-        {!!errors.email && <Text color="red">Email is required.</Text>}
+    <>
+      <SEO title="Login" />
+      <Layout>
+        <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3}>
+          {!!error && <Text color="red">{error.message}</Text>}
+          <Box>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              ref={register({ required: true })}
+            />
+          </Box>
+          {!!errors.email && <Text color="red">Email is required.</Text>}
 
-        <Box mt={2}>
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            ref={register({ required: true })}
-          />
-        </Box>
-        {!!errors.password && <Text color="red">Password is required.</Text>}
+          <Box mt={2}>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              ref={register({ required: true })}
+            />
+          </Box>
+          {!!errors.password && <Text color="red">Password is required.</Text>}
 
-        <Label my={2}>
-          <Checkbox
-            id="rememberMe"
-            name="rememberMe"
-            ref={register({ required: true })}
-            defaultChecked
-          />
-          Remember Me
-        </Label>
-        <Box mt={2}>
-          <Button type="submit">Login</Button>
+          <Label my={2}>
+            <Checkbox
+              id="rememberMe"
+              name="rememberMe"
+              ref={register({ required: true })}
+              defaultChecked
+            />
+            Remember Me
+          </Label>
+          <Box mt={2}>
+            <Button type="submit">Login</Button>
+          </Box>
         </Box>
-      </Box>
-    </Layout>
+      </Layout>
+    </>
   );
 };
