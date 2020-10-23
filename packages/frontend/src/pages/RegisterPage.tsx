@@ -3,9 +3,10 @@ import { Heading, Box, Button, Text } from 'rebass';
 import { useForm } from 'react-hook-form';
 import { useRegisterMutation } from '../generated/types-and-hooks';
 import { token } from '../store/cache';
-import { navigate } from 'gatsby';
+import { useHistory } from 'react-router-dom';
 import { Layout } from '../components/layout/layout';
 import { Label, Input } from '@rebass/forms';
+import { routes } from '../routes';
 
 interface Inputs {
   email: string;
@@ -13,10 +14,11 @@ interface Inputs {
   passwordConfirm: string;
 }
 
-const Register: React.FC = () => {
+export const RegisterPage: React.FC = () => {
   const { register, handleSubmit, setError, errors } = useForm<Inputs>();
 
   const [registerUser, { error }] = useRegisterMutation({ errorPolicy: 'all' });
+  const history = useHistory();
 
   const onSubmit = async (details: Inputs) => {
     if (details.password !== details.passwordConfirm) {
@@ -32,7 +34,7 @@ const Register: React.FC = () => {
     if (data) {
       token(data.createUser);
       localStorage.setItem('loggedIn', 'true');
-      navigate('/app/');
+      history.push(routes.todos);
     }
   };
 
@@ -82,5 +84,3 @@ const Register: React.FC = () => {
     </Layout>
   );
 };
-
-export default Register;

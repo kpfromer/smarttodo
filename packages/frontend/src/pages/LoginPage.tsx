@@ -3,9 +3,10 @@ import { Layout } from '../components/layout/layout';
 import { Label, Input, Checkbox } from '@rebass/forms';
 import { Box, Text, Button } from 'rebass';
 import { useForm } from 'react-hook-form';
-import { navigate } from 'gatsby';
 import { useLoginMutation } from '../generated/types-and-hooks';
 import { token } from '../store/cache';
+import { useHistory } from 'react-router-dom';
+import { routes } from '../routes';
 
 interface Inputs {
   email: string;
@@ -13,10 +14,11 @@ interface Inputs {
   rememberMe: boolean;
 }
 
-const Login: React.FC = () => {
+export const LoginPage: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<Inputs>();
 
   const [login, { error }] = useLoginMutation({ errorPolicy: 'all' });
+  const history = useHistory();
 
   const onSubmit = async (details: Inputs) => {
     const { data } = await login({ variables: details });
@@ -27,7 +29,7 @@ const Login: React.FC = () => {
       } else {
         localStorage.setItem('loggedIn', 'false');
       }
-      navigate('/app/');
+      history.push(routes.todos);
     }
   };
 
@@ -73,5 +75,3 @@ const Login: React.FC = () => {
     </Layout>
   );
 };
-
-export default Login;

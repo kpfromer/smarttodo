@@ -23,9 +23,11 @@ const getAccessToken = async () => {
   } catch {
     // Invalid refresh token, remove token
     token(undefined);
+    localStorage.setItem('loggedIn', 'false');
+    // console.warn('Invalid refresh token');
     // TODO: show message?
+    return;
   }
-  return;
 };
 
 const refreshTokenLink = onError(({ forward, operation, graphQLErrors }) => {
@@ -33,8 +35,9 @@ const refreshTokenLink = onError(({ forward, operation, graphQLErrors }) => {
     for (const error of graphQLErrors) {
       if (
         error.message ===
-          'Access denied! You need to be authorized to perform this action!' ||
-        error.extensions?.code === 'UNAUTHENTICATED'
+        'Access denied! You need to be authorized to perform this action!'
+        // ||
+        // error.extensions?.code === 'UNAUTHENTICATED'
       ) {
         return (
           fromPromise(getAccessToken())

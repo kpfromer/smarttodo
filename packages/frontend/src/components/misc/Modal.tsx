@@ -8,13 +8,9 @@ interface Props {
   sx: SxStyleProp;
 }
 
-export const Modal: React.FC<Props & Omit<BoxProps, 'onClick' | 'sx'>> = ({
-  background,
-  onClose,
-  sx,
-  children,
-  ...rest
-}) => {
+export const Modal: React.FC<
+  Props & Omit<BoxProps, 'onClick' | 'sx' | 'css'>
+> = ({ background, onClose, sx, children, ...rest }) => {
   const { Portal } = usePortal();
 
   const modalStyle: SxStyleProp = {

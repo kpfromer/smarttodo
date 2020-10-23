@@ -5,7 +5,7 @@ interface Props {
   color: string;
 }
 
-export const Dot: React.FC<Props & Omit<BoxProps, 'color'>> = ({
+export const Dot: React.FC<Props & Omit<BoxProps, 'color' | 'css'>> = ({
   color,
   ...rest
 }) => {

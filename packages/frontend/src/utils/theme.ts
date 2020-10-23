@@ -1,8 +1,3 @@
-import React from 'react';
-import { ThemeProvider } from 'theme-ui';
-import { client } from '../store/apollo';
-import { ApolloProvider } from '@apollo/client';
-
 const heading = {
   color: 'text',
   fontFamily: 'heading',
@@ -141,9 +136,3 @@ export const theme = {
     textDecoration: 'none'
   }
 };
-
-export const wrapRootElement = ({ element }) => (
-  <ApolloProvider client={client}>
-    <ThemeProvider theme={theme}>{element}</ThemeProvider>
-  </ApolloProvider>
-);

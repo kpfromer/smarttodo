@@ -1,13 +1,17 @@
 import React from 'react';
 import { Link as RebassLink, LinkProps } from 'rebass';
-import { Link as GatsbyLink, GatsbyLinkProps } from 'gatsby';
+import {
+  Link as GatsbyLink,
+  LinkProps as RouterLinkProps
+} from 'react-router-dom';
 
 interface Props {
+  to: string;
   outside?: boolean;
 }
 
 export const Link: React.FC<
-  Props & Omit<LinkProps, 'href'> & GatsbyLinkProps<unknown>
+  Props & Omit<LinkProps, 'href'> & Omit<RouterLinkProps, 'to'>
 > = ({ outside = false, to, children, ...props }) => {
   if (!outside) {
     return (

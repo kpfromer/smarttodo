@@ -3,13 +3,11 @@ import { Flex, Box, Heading } from 'rebass';
 import { Link } from '../misc/link';
 import { useLoginTokenQuery } from '../../generated/types-and-hooks';
 import { logout } from '../../utils/logout';
+import { routes } from '../../routes';
 
 export const Header: React.FC = () => {
   const { data } = useLoginTokenQuery();
-  const loggedIn =
-    (typeof window !== 'undefined' &&
-      localStorage.getItem('loggedIn') === 'true') ||
-    !!data?.token;
+  const loggedIn = localStorage.getItem('loggedIn') === 'true' || !!data?.token;
 
   return (
     <Box bg="primary" color="white">
@@ -21,7 +19,7 @@ export const Header: React.FC = () => {
         <Flex ml="auto" alignItems="center">
           {loggedIn ? (
             <>
-              <Link variant="nav" to="/app/" mr={3}>
+              <Link variant="nav" to={routes.todos} mr={3}>
                 Todo
               </Link>
               <Box variant="nav" onClick={logout}>
@@ -30,10 +28,10 @@ export const Header: React.FC = () => {
             </>
           ) : (
             <>
-              <Link variant="nav" to="/register" mr={3}>
+              <Link variant="nav" to={routes.register} mr={3}>
                 Register
               </Link>
-              <Link variant="nav" to="/login" data-testid="loginHeader">
+              <Link variant="nav" to={routes.login} data-testid="loginHeader">
                 Login
               </Link>
             </>

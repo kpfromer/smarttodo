@@ -11,6 +11,5 @@ module.exports = {
     eqeqeq: 'error',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off'
-  },
-  ignorePatterns: ['**/node_modules', '**/lib', '**/build']
+  }
 };
