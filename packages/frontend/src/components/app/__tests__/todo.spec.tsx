@@ -1,9 +1,5 @@
-import React from 'react';
 import { graphql } from 'msw';
 import { setupServer } from 'msw/node';
-import userEvent from '@testing-library/user-event';
-import * as gatsby from 'gatsby';
-import { Todo } from '../todo';
 import { ProjectFieldsFragment } from '../../../generated/types-and-hooks';
 
 const server = setupServer();
