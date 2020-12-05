@@ -48,5 +48,28 @@
     "set-cookie-parser": "^2.4.6",
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.4"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ],
+    "testEnvironment": "node"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts",
+    "ignore": [
+      "src/**/*.spec.ts"
+    ],
+    "exec": "ts-node src/index.ts"
   }
 }
