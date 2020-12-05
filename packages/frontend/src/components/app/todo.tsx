@@ -8,7 +8,7 @@ import {
   useUpdateTodoMutation,
   TodoFieldsFragment,
   ProjectFieldsFragment,
-  useDeleteTodoMutation
+  useDeleteTodoMutation,
 } from '../../generated/types-and-hooks';
 import { Input } from '@rebass/forms';
 import { Dot } from '../misc/Dot';
@@ -38,24 +38,22 @@ const TodoItem: React.FC<{
         id: cache.identify(project),
         fields: {
           todos(existingTodoRefs: Reference[]) {
-            return existingTodoRefs.filter(
-              (todoRef) => todoRef.__ref !== deletedTodoRef
-            );
-          }
-        }
+            return existingTodoRefs.filter((todoRef) => todoRef.__ref !== deletedTodoRef);
+          },
+        },
       });
-    }
+    },
   });
   return (
     <Box>
       <Flex
         sx={{
           '& .showOnHover': {
-            visibility: 'hidden'
+            visibility: 'hidden',
           },
           '&:hover .showOnHover': {
-            visibility: 'visible'
-          }
+            visibility: 'visible',
+          },
         }}
       >
         <Box>
@@ -66,7 +64,7 @@ const TodoItem: React.FC<{
                 updateTodo({
                   variables: {
                     id: todo.id,
-                    completed: event.target.checked
+                    completed: event.target.checked,
                   },
                   optimisticResponse: {
                     __typename: 'Mutation',
@@ -75,9 +73,9 @@ const TodoItem: React.FC<{
                       id: todo.id,
                       completed: event.target.checked,
                       name: todo.name,
-                      description: todo.description
-                    }
-                  }
+                      description: todo.description,
+                    },
+                  },
                 })
               }
             />
@@ -94,7 +92,7 @@ const TodoItem: React.FC<{
           <IconContext.Provider
             value={{
               style: { verticalAlign: 'middle' },
-              color: theme.colors?.text
+              color: theme.colors?.text,
             }}
           >
             <FaTimes />
@@ -110,9 +108,7 @@ interface CreateTodoInputs {
   name: string;
 }
 
-const CreateTodo: React.FC<{ project: ProjectFieldsFragment }> = ({
-  project
-}) => {
+const CreateTodo: React.FC<{ project: ProjectFieldsFragment }> = ({ project }) => {
   const { register, handleSubmit, setValue } = useForm<CreateTodoInputs>();
 
   const [createTodo] = useCreateTodoMutation({
@@ -127,7 +123,7 @@ const CreateTodo: React.FC<{ project: ProjectFieldsFragment }> = ({
             name
             description
           }
-        `
+        `,
       });
 
       // add todo to project's todos lists
@@ -136,10 +132,10 @@ const CreateTodo: React.FC<{ project: ProjectFieldsFragment }> = ({
         fields: {
           todos(existingTodoRefs: Reference[]) {
             return [...existingTodoRefs, newTodoRef];
-          }
-        }
+          },
+        },
       });
-    }
+    },
   });
 
   const onSubmit = (inputs: CreateTodoInputs) => {
@@ -147,8 +143,8 @@ const CreateTodo: React.FC<{ project: ProjectFieldsFragment }> = ({
       variables: {
         projectId: project.id,
         name: inputs.name,
-        completed: false
-      }
+        completed: false,
+      },
     });
     setValue('name', '');
   };
@@ -156,12 +152,7 @@ const CreateTodo: React.FC<{ project: ProjectFieldsFragment }> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex>
-        <Input
-          name="name"
-          ref={register({ required: true })}
-          defaultValue=""
-          mr={2}
-        />
+        <Input name="name" ref={register({ required: true })} defaultValue="" mr={2} />
         <Button type="submit">Create</Button>
       </Flex>
     </form>
@@ -176,7 +167,7 @@ export const Todo: React.FC = () => {
   // TODO: Change if in mobile
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const sidebarProps = useSpring({
-    marginLeft: sidebarOpen ? `${sidebarSize}px` : `0px`
+    marginLeft: sidebarOpen ? `${sidebarSize}px` : `0px`,
   });
   const [projectId, setProjectId] = useState<undefined | string>(undefined);
 
@@ -185,15 +176,11 @@ export const Todo: React.FC = () => {
       if (!projectId) {
         setProjectId(data.defaultProject.id);
       }
-    }
+    },
   });
-  const currentProject = data?.projects.find(
-    (project) => project.id === projectId
-  );
+  const currentProject = data?.projects.find((project) => project.id === projectId);
   const [openedTodo, setOpen] = useState<undefined | string>(undefined);
-  const currentTodo = currentProject?.todos.find(
-    (todo) => todo.id === openedTodo
-  );
+  const currentTodo = currentProject?.todos.find((todo) => todo.id === openedTodo);
 
   if (loading) return <Text>Loading</Text>;
   return (
@@ -208,7 +195,7 @@ export const Todo: React.FC = () => {
             <IconContext.Provider
               value={{
                 style: { verticalAlign: 'middle' },
-                color: theme.colors?.text
+                color: theme.colors?.text,
               }}
             >
               <FaBars onClick={() => setSidebarOpen(!sidebarOpen)} />
@@ -220,7 +207,7 @@ export const Todo: React.FC = () => {
             <IconContext.Provider
               value={{
                 style: { verticalAlign: 'middle' },
-                color: theme.colors?.text
+                color: theme.colors?.text,
               }}
             >
               <FaCog />
@@ -242,7 +229,7 @@ export const Todo: React.FC = () => {
                   flexGrow: 1,
                   position: 'relative',
                   zIndex: 10,
-                  bg: 'background'
+                  bg: 'background',
                 }}
               >
                 <Heading mb={2}>{currentProject.name}</Heading>
@@ -260,21 +247,12 @@ export const Todo: React.FC = () => {
             )}
           </AnimatedSidebarBody>
 
-          <Sidebar
-            headerSize={headerSize}
-            pt={3}
-            px={3}
-            sx={{ bg: lighterBackground }}
-          >
+          <Sidebar headerSize={headerSize} pt={3} px={3} sx={{ bg: lighterBackground }}>
             <Text fontWeight="bold">Projects</Text>
             <Divider />
 
             {data?.projects.map((project) => (
-              <Flex
-                key={project.id}
-                alignItems="center"
-                onClick={() => setProjectId(project.id)}
-              >
+              <Flex key={project.id} alignItems="center" onClick={() => setProjectId(project.id)}>
                 <Dot color={project.color} mr={2} />
                 <Box>
                   <Text
@@ -293,11 +271,7 @@ export const Todo: React.FC = () => {
         </SidebarContainer>
       )}
       {!!currentTodo && !!currentProject && (
-        <TodoModal
-          project={currentProject}
-          todo={currentTodo}
-          onClose={() => setOpen(undefined)}
-        />
+        <TodoModal project={currentProject} todo={currentTodo} onClose={() => setOpen(undefined)} />
       )}
     </Flex>
   );

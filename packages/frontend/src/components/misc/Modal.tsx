@@ -22,7 +22,7 @@ export const Modal: React.FC<Props & Omit<BoxProps, 'onClick' | 'sx'>> = ({
     left: '50%',
     top: '50%',
     transform: 'translate(-50%,-50%)',
-    ...sx
+    ...sx,
   };
 
   const backgroundStyle: SxStyleProp = {
@@ -32,17 +32,13 @@ export const Modal: React.FC<Props & Omit<BoxProps, 'onClick' | 'sx'>> = ({
     height: '100vh',
     top: 0,
     bottom: 0,
-    zIndex: 1000
+    zIndex: 1000,
   };
 
   return (
     <Portal>
       <Box sx={backgroundStyle} onClick={onClose}>
-        <Box
-          {...rest}
-          sx={modalStyle}
-          onClick={(event) => event.stopPropagation()}
-        >
+        <Box {...rest} sx={modalStyle} onClick={(event) => event.stopPropagation()}>
           {children}
         </Box>
       </Box>

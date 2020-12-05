@@ -54,26 +54,13 @@ query getAllProjectsAndTodos {
   }
 }
 
-mutation updateTodo(
-  $id: ID!
-  $name: String
-  $completed: Boolean
-  $description: String
-) {
-  updateTodo(
-    id: $id
-    options: { completed: $completed, name: $name, description: $description }
-  ) {
+mutation updateTodo($id: ID!, $name: String, $completed: Boolean, $description: String) {
+  updateTodo(id: $id, options: { completed: $completed, name: $name, description: $description }) {
     ...TodoFields
   }
 }
 
-mutation createTodo(
-  $projectId: ID!
-  $name: String!
-  $description: String
-  $completed: Boolean!
-) {
+mutation createTodo($projectId: ID!, $name: String!, $description: String, $completed: Boolean!) {
   createTodo(
     project: $projectId
     options: { name: $name, description: $description, completed: $completed }

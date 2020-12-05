@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   useUpdateTodoMutation,
   TodoFieldsFragment,
-  ProjectFieldsFragment
+  ProjectFieldsFragment,
 } from '../../generated/types-and-hooks';
 import { Modal } from '../misc/Modal';
 import { Flex, Box, Text } from 'rebass';
@@ -33,7 +33,7 @@ export const TodoModal: React.FC<Props> = ({ project, todo, onClose }) => {
     await updateTodo({
       variables: {
         id: todo.id,
-        name: inputs.name
+        name: inputs.name,
       },
       optimisticResponse: {
         __typename: 'Mutation',
@@ -42,9 +42,9 @@ export const TodoModal: React.FC<Props> = ({ project, todo, onClose }) => {
           id: todo.id,
           completed: todo.completed,
           name: inputs.name,
-          description: todo.description
-        }
-      }
+          description: todo.description,
+        },
+      },
     });
 
     setEditing(false);
@@ -59,7 +59,7 @@ export const TodoModal: React.FC<Props> = ({ project, todo, onClose }) => {
         textAlign: 'center',
         width: ['95%', 300],
         borderRadius: 10,
-        minWidth: 400
+        minWidth: 400,
       }}
       py={3}
       px={2}
@@ -84,7 +84,7 @@ export const TodoModal: React.FC<Props> = ({ project, todo, onClose }) => {
                   updateTodo({
                     variables: {
                       id: todo.id,
-                      completed: event.target.checked
+                      completed: event.target.checked,
                     },
                     optimisticResponse: {
                       __typename: 'Mutation',
@@ -93,9 +93,9 @@ export const TodoModal: React.FC<Props> = ({ project, todo, onClose }) => {
                         id: todo.id,
                         completed: event.target.checked,
                         name: todo.name,
-                        description: todo.description
-                      }
-                    }
+                        description: todo.description,
+                      },
+                    },
                   })
                 }
               />
@@ -106,11 +106,7 @@ export const TodoModal: React.FC<Props> = ({ project, todo, onClose }) => {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box p={1}>
-            <Input
-              name="name"
-              ref={register({ required: true })}
-              defaultValue={todo.name}
-            />
+            <Input name="name" ref={register({ required: true })} defaultValue={todo.name} />
           </Box>
         </form>
       )}

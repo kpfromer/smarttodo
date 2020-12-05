@@ -5,10 +5,7 @@ interface Props {
   color: string;
 }
 
-export const Dot: React.FC<Props & Omit<BoxProps, 'color'>> = ({
-  color,
-  ...rest
-}) => {
+export const Dot: React.FC<Props & Omit<BoxProps, 'color'>> = ({ color, ...rest }) => {
   return (
     <Box
       {...rest}
@@ -21,8 +18,8 @@ export const Dot: React.FC<Props & Omit<BoxProps, 'color'>> = ({
           display: 'inline-block',
           width: '10px',
           height: '10px',
-          borderRadius: '100%'
-        }
+          borderRadius: '100%',
+        },
       }}
     />
   );

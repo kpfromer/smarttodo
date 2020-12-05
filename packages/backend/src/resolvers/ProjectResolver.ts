@@ -8,7 +8,7 @@ import {
   Root,
   InputType,
   Authorized,
-  Ctx
+  Ctx,
 } from 'type-graphql';
 import { ProjectModel, Project } from '../model/Project';
 import { Todo, TodoModel } from '../model/Todo';
@@ -36,14 +36,14 @@ export class ProjectResolver {
   @Mutation(() => Project)
   async createProject(
     @Ctx('me') me: { id: string },
-    @Arg('options', () => ProjectCreateInput) options: ProjectCreateInput
+    @Arg('options', () => ProjectCreateInput) options: ProjectCreateInput,
   ) {
     const project = await ProjectModel.create({
       ...options,
       updated: new Date(),
       created: new Date(),
       todoIds: [],
-      userId: me.id
+      userId: me.id,
     });
     return project;
   }
@@ -53,7 +53,7 @@ export class ProjectResolver {
   async projects(@Ctx('me') me: { id: string }) {
     return (
       await ProjectModel.find({
-        userId: me.id
+        userId: me.id,
       })
     ).map((project) => project.toJSON({ virtuals: true }));
   }
@@ -64,7 +64,7 @@ export class ProjectResolver {
     const user = await ctx.loaders!.user.load(ctx.me!.id);
 
     return await ProjectModel.findOne({
-      _id: user!.defaultProject
+      _id: user!.defaultProject,
     });
   }
 

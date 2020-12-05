@@ -5,7 +5,7 @@ import { LogoutDocument, LogoutMutation } from '../generated/types-and-hooks';
 export const logout = async (): Promise<void> => {
   try {
     await client.mutate<LogoutMutation>({
-      mutation: LogoutDocument
+      mutation: LogoutDocument,
     });
     localStorage.setItem('loggedIn', 'false');
   } catch {

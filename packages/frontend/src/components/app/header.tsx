@@ -6,11 +6,7 @@ interface Props {
   right: React.ReactChildren | React.ReactChild;
 }
 
-export const Header: React.FC<Props & Omit<BoxProps, 'css'>> = ({
-  left,
-  right,
-  ...rest
-}) => {
+export const Header: React.FC<Props & Omit<BoxProps, 'css'>> = ({ left, right, ...rest }) => {
   return (
     <Box {...rest}>
       <Flex py={3} alignItems="center">

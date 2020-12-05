@@ -16,7 +16,7 @@ export const createApolloServer = async () => {
       resolvers: [UserResolver, ProjectResolver, TodoResolver],
       authChecker,
       // Not using class-validator currently
-      validate: false
+      validate: false,
     }),
     context: async ({ req, res }) => {
       const me = await getMe(req);
@@ -26,12 +26,10 @@ export const createApolloServer = async () => {
         refreshToken: req.cookies['refresh-token'] as string | undefined,
         res,
         loaders: {
-          user: new DataLoader((keys: readonly mongoose.Types.ObjectId[]) =>
-            batchUsers(keys)
-          )
-        }
+          user: new DataLoader((keys: readonly mongoose.Types.ObjectId[]) => batchUsers(keys)),
+        },
       } as ContextType;
     },
-    introspection: true
+    introspection: true,
   });
 };

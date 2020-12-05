@@ -1,10 +1,7 @@
 import React from 'react';
 import { graphql } from 'msw';
 import { setupServer } from 'msw/node';
-import {
-  LoginMutationVariables,
-  LoginMutation
-} from '../../generated/types-and-hooks';
+import { LoginMutationVariables, LoginMutation } from '../../generated/types-and-hooks';
 import { render, screen, waitFor } from '../../utils/test/apollo_render';
 import Login from '../login';
 import userEvent from '@testing-library/user-event';
@@ -23,13 +20,11 @@ describe('Login page', () => {
       return res(
         ctx.data({
           __typename: 'Mutation',
-          login: 'token'
-        })
+          login: 'token',
+        }),
       );
     });
-    server.use(
-      graphql.mutation<LoginMutation, LoginMutationVariables>('login', login)
-    );
+    server.use(graphql.mutation<LoginMutation, LoginMutationVariables>('login', login));
   });
 
   it('logins user', async () => {

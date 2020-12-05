@@ -21,8 +21,8 @@ jest.mock('gatsby', () => ({
     }) =>
       React.createElement('a', {
         ...rest,
-        href: to
-      })
+        href: to,
+      }),
   ),
   StaticQuery: jest.fn(),
   useStaticQuery: jest.fn().mockImplementation(() => ({
@@ -30,9 +30,9 @@ jest.mock('gatsby', () => ({
       siteMetadata: {
         title: 'title',
         description: 'description',
-        author: 'Kyle Pfromer'
-      }
-    }
+        author: 'Kyle Pfromer',
+      },
+    },
   })),
-  navigate: jest.fn().mockResolvedValue(undefined)
+  navigate: jest.fn().mockResolvedValue(undefined),
 }));

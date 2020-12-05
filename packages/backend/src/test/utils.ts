@@ -22,7 +22,7 @@ export const createMockDatabase = async (): Promise<MockMongooseReturn> => {
   await connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    dbName: 'test'
+    dbName: 'test',
   });
   // Make Mongoose use `findOneAndUpdate()`. Note that this option is `true`
   // by default, you need to set it to false.
@@ -39,37 +39,32 @@ export const createMockDatabase = async (): Promise<MockMongooseReturn> => {
     stop: async () => {
       await mongoose.disconnect();
       await mongod.stop();
-    }
+    },
   };
 };
 
-export const createMockUser = async ({
-  password,
-  ...rest
-}: Pick<User, 'email' | 'password'>) => {
+export const createMockUser = async ({ password, ...rest }: Pick<User, 'email' | 'password'>) => {
   return await UserModel.create({
     ...rest,
-    password: await bcrypt.hash(password, 10)
+    password: await bcrypt.hash(password, 10),
   });
 };
 
 export const createMockProject = async (
   userId: string,
   project: Pick<Project, 'name' | 'color'>,
-  todos: Pick<Todo, 'name' | 'description' | 'completed'>[] = []
+  todos: Pick<Todo, 'name' | 'description' | 'completed'>[] = [],
 ) => {
   const projectItem = await ProjectModel.create({
     ...project,
     userId,
     todoIds: [],
     created: new Date(),
-    updated: new Date()
+    updated: new Date(),
   });
 
   const todoItems = await Promise.all(
-    todos.map(
-      async (todo) => await createMockTodo(userId, projectItem.id, todo)
-    )
+    todos.map(async (todo) => await createMockTodo(userId, projectItem.id, todo)),
   );
 
   return { project: projectItem, todos: todoItems };
@@ -78,14 +73,14 @@ export const createMockProject = async (
 export const createMockTodo = async (
   userId: string,
   projectId: string,
-  todo: Pick<Todo, 'name' | 'description' | 'completed'>
+  todo: Pick<Todo, 'name' | 'description' | 'completed'>,
 ) => {
   return await TodoModel.create({
     ...todo,
     userId,
     projectId,
     created: new Date(),
-    updated: new Date()
+    updated: new Date(),
   });
 };
 

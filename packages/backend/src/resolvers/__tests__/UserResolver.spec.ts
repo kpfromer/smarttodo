@@ -1,8 +1,4 @@
-import {
-  createMockDatabase,
-  createMockUser,
-  MockMongooseReturn
-} from '../../test/utils';
+import { createMockDatabase, createMockUser, MockMongooseReturn } from '../../test/utils';
 import jwt from 'jsonwebtoken';
 import { DocumentType } from '@typegoose/typegoose';
 import { User } from '../../model/User';
@@ -23,7 +19,7 @@ describe('User resolvers', () => {
   beforeEach(async () => {
     user = await createMockUser({
       email: 'example@email.com',
-      password: 'password123'
+      password: 'password123',
     });
   });
   afterEach(async () => {
@@ -40,7 +36,7 @@ describe('User resolvers', () => {
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .send({
-          query: `mutation { createUser(email: "new@email.com", password: "newPassword") }`
+          query: `mutation { createUser(email: "new@email.com", password: "newPassword") }`,
         })
         .expect('Content-Type', /json/)
         .expect(200);
@@ -50,7 +46,7 @@ describe('User resolvers', () => {
       expect(jwt.verify(accessToken, config.get('jwt.access.secret'))).toEqual({
         exp: expect.any(Number),
         iat: expect.any(Number),
-        id: expect.any(String)
+        id: expect.any(String),
       });
 
       const cookies = setCookie.parse(res.header['set-cookie']);
@@ -63,7 +59,7 @@ describe('User resolvers', () => {
         httpOnly: true,
         value: expect.any(String),
         maxAge: expect.any(Number),
-        expires: expect.any(Date)
+        expires: expect.any(Date),
       });
     });
 
@@ -73,14 +69,14 @@ describe('User resolvers', () => {
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .send({
-          query: `mutation { createUser(email: "example@email.com", password: "doesnotmatter") }`
+          query: `mutation { createUser(email: "example@email.com", password: "doesnotmatter") }`,
         })
         .expect('Content-Type', /json/)
         .expect(200);
 
       expect(res.body.errors).toHaveLength(1);
       expect(res.body.errors[0].message).toMatchInlineSnapshot(
-        `"User with that email already exists!"`
+        `"User with that email already exists!"`,
       );
     });
   });
@@ -92,7 +88,7 @@ describe('User resolvers', () => {
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .send({
-          query: `mutation { login(email: "example@email.com", password: "password123") }`
+          query: `mutation { login(email: "example@email.com", password: "password123") }`,
         })
         .expect('Content-Type', /json/)
         .expect(200);
@@ -103,7 +99,7 @@ describe('User resolvers', () => {
       expect(jwt.verify(accessToken, config.get('jwt.access.secret'))).toEqual({
         exp: expect.any(Number),
         iat: expect.any(Number),
-        id: user.id
+        id: user.id,
       });
     });
 
@@ -117,15 +113,13 @@ describe('User resolvers', () => {
             mutation {
               login(email: "does_not_exist@email.com", password: "nothing")
             }
-        `
+        `,
         })
         .expect('Content-Type', /json/)
         .expect(200);
 
       expect(res.body.errors).toHaveLength(1);
-      expect(res.body.errors[0].message).toMatchInlineSnapshot(
-        `"Invalid login or password."`
-      );
+      expect(res.body.errors[0].message).toMatchInlineSnapshot(`"Invalid login or password."`);
     });
 
     it('shows error message if email password does not match', async () => {
@@ -138,15 +132,13 @@ describe('User resolvers', () => {
             mutation {
               login(email: "example@email.com", password: "badPassword")
             }
-        `
+        `,
         })
         .expect('Content-Type', /json/)
         .expect(200);
 
       expect(res.body.errors).toHaveLength(1);
-      expect(res.body.errors[0].message).toMatchInlineSnapshot(
-        `"Invalid login or password."`
-      );
+      expect(res.body.errors[0].message).toMatchInlineSnapshot(`"Invalid login or password."`);
     });
     it('logins in a user and returns refresh token as cookie', async () => {
       const res = await request
@@ -158,7 +150,7 @@ describe('User resolvers', () => {
             mutation {
               login(email: "example@email.com", password: "password123", rememberMe: true)
             }
-        `
+        `,
         })
         .expect('Content-Type', /json/)
         .expect(200);
@@ -173,7 +165,7 @@ describe('User resolvers', () => {
         httpOnly: true,
         value: expect.any(String),
         maxAge: expect.any(Number),
-        expires: expect.any(Date)
+        expires: expect.any(Date),
       });
     });
   });

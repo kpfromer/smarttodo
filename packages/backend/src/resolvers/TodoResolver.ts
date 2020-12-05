@@ -1,15 +1,6 @@
 import { mongoose } from '@typegoose/typegoose';
 import { UserInputError } from 'apollo-server-express';
-import {
-  Arg,
-  Authorized,
-  Ctx,
-  Field,
-  ID,
-  InputType,
-  Mutation,
-  Resolver
-} from 'type-graphql';
+import { Arg, Authorized, Ctx, Field, ID, InputType, Mutation, Resolver } from 'type-graphql';
 import { ProjectModel } from '../model/Project';
 import { Todo, TodoModel } from '../model/Todo';
 import { ContextType } from '../types';
@@ -48,7 +39,7 @@ export class TodoResolver {
   async createTodo(
     @Ctx('me') me: ContextType['me'],
     @Arg('project', () => ID) projectId: string,
-    @Arg('options', () => TodoCreateInput) options: TodoCreateInput
+    @Arg('options', () => TodoCreateInput) options: TodoCreateInput,
   ) {
     const project = await ProjectModel.findById(projectId);
 
@@ -61,11 +52,11 @@ export class TodoResolver {
       updated: new Date(),
       created: new Date(),
       projectId: project.id,
-      userId: me!.id
+      userId: me!.id,
     });
 
     await project.updateOne({
-      $push: { todoIds: todo._id }
+      $push: { todoIds: todo._id },
     });
     return todo;
   }
@@ -75,13 +66,13 @@ export class TodoResolver {
   async updateTodo(
     @Ctx('me') me: { id: string },
     @Arg('id', () => ID) todoId: string,
-    @Arg('options', () => TodoUpdateInput) options: TodoUpdateInput
+    @Arg('options', () => TodoUpdateInput) options: TodoUpdateInput,
   ) {
     try {
       const todo = await TodoModel.findOneAndUpdate(
         { _id: todoId, userId: me.id },
         { $set: options },
-        { new: true }
+        { new: true },
       );
       if (todo) {
         return todo.toJSON({ virtuals: true });
@@ -94,24 +85,21 @@ export class TodoResolver {
 
   @Authorized()
   @Mutation(() => Todo, { nullable: true })
-  async deleteTodo(
-    @Ctx('me') me: { id: string },
-    @Arg('id', () => ID) todoId: string
-  ) {
+  async deleteTodo(@Ctx('me') me: { id: string }, @Arg('id', () => ID) todoId: string) {
     try {
       const todo = await TodoModel.findOneAndDelete({
         _id: todoId,
-        userId: me.id
+        userId: me.id,
       });
 
       // remove todo from projects that have it
       await ProjectModel.updateMany(
         {
-          todoIds: { $in: [mongoose.Types.ObjectId(todo?.id)] }
+          todoIds: { $in: [mongoose.Types.ObjectId(todo?.id)] },
         },
         {
-          $pull: { todoIds: mongoose.Types.ObjectId(todo?.id) }
-        }
+          $pull: { todoIds: mongoose.Types.ObjectId(todo?.id) },
+        },
       );
 
       if (todo) {

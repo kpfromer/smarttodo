@@ -16,15 +16,15 @@ const fakeDefaultProject: ProjectFieldsFragment = {
     {
       id: '1',
       name: 'First todo',
-      completed: false
+      completed: false,
     },
     {
       id: '2',
       name: 'second todo',
       completed: true,
-      description: 'Such tech, much wow.'
-    }
-  ]
+      description: 'Such tech, much wow.',
+    },
+  ],
 };
 
 const fakeProject: ProjectFieldsFragment = {
@@ -35,14 +35,14 @@ const fakeProject: ProjectFieldsFragment = {
     {
       id: '1',
       name: 'third todo',
-      completed: false
+      completed: false,
     },
     {
       id: '2',
       name: 'fourth todo',
-      completed: true
-    }
-  ]
+      completed: true,
+    },
+  ],
 };
 
 describe('Todo page', () => {
@@ -52,10 +52,10 @@ describe('Todo page', () => {
         res(
           ctx.data({
             defaultProject: [fakeDefaultProject],
-            projects: [fakeProject]
-          })
+            projects: [fakeProject],
+          }),
         );
-      })
+      }),
     );
   });
   it.todo('creates a todo');

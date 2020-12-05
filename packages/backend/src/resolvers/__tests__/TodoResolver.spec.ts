@@ -2,7 +2,7 @@ import {
   MockMongooseReturn,
   createMockDatabase,
   createMockUser,
-  createMockProject
+  createMockProject,
 } from '../../test/utils';
 import { User } from '../../model/User';
 import supertest from 'supertest';
@@ -26,25 +26,25 @@ describe('Todo resolver', () => {
   beforeEach(async () => {
     user = await createMockUser({
       email: 'example@email.com',
-      password: 'password123'
+      password: 'password123',
     });
 
     ({
       project,
-      todos: [todo]
+      todos: [todo],
     } = await createMockProject(
       user.id,
       {
         name: 'New Project',
-        color: '#1244ff'
+        color: '#1244ff',
       },
       [
         {
           name: 'Existing todo',
           description: 'WoooW',
-          completed: true
-        }
-      ]
+          completed: true,
+        },
+      ],
     ));
     // Login
     const res = await request
@@ -52,7 +52,7 @@ describe('Todo resolver', () => {
       .set('Content-Type', 'application/json')
       .set('Accept', 'application/json')
       .send({
-        query: `mutation { login(email: "example@email.com", password: "password123") }`
+        query: `mutation { login(email: "example@email.com", password: "password123") }`,
       });
 
     accessToken = res.body.data.login;
@@ -83,14 +83,14 @@ describe('Todo resolver', () => {
                 completed
               }
             }
-          `
+          `,
         });
 
       expect(res.body.data.createTodo).toEqual({
         id: expect.any(String),
         name: 'new todo',
         description: 'Cool stuff',
-        completed: false
+        completed: false,
       });
     });
     it('shows error message if not authenticated', async () => {
@@ -108,12 +108,12 @@ describe('Todo resolver', () => {
               completed
             }
           }
-        `
+        `,
         })
         .expect(200);
       expect(res.body.errors).toHaveLength(1);
       expect(res.body.errors[0].message).toMatchInlineSnapshot(
-        `"Access denied! You need to be authorized to perform this action!"`
+        `"Access denied! You need to be authorized to perform this action!"`,
       );
     });
   });
@@ -135,7 +135,7 @@ describe('Todo resolver', () => {
                 completed
               }
             }
-      `
+      `,
         })
         .expect(200);
 
@@ -143,7 +143,7 @@ describe('Todo resolver', () => {
         id: todo.id,
         name: todo.name,
         description: todo.description,
-        completed: true
+        completed: true,
       });
     });
     it('returns null if no todo is found', async () => {
@@ -162,7 +162,7 @@ describe('Todo resolver', () => {
                 completed
               }
             }
-      `
+      `,
         })
         .expect(200);
 
@@ -183,13 +183,13 @@ describe('Todo resolver', () => {
                 completed
               }
             }
-      `
+      `,
         })
         .expect(200);
 
       expect(res.body.errors).toHaveLength(1);
       expect(res.body.errors[0].message).toMatchInlineSnapshot(
-        `"Access denied! You need to be authorized to perform this action!"`
+        `"Access denied! You need to be authorized to perform this action!"`,
       );
     });
   });
@@ -213,7 +213,7 @@ describe('Todo resolver', () => {
               completed
             }
           }
-    `
+    `,
         })
         .expect(200);
 
@@ -221,7 +221,7 @@ describe('Todo resolver', () => {
         id: todo.id,
         name: todo.name,
         description: todo.description,
-        completed: true
+        completed: true,
       });
 
       // Should not present for todos
@@ -240,7 +240,7 @@ describe('Todo resolver', () => {
               completed
             }
           }
-    `
+    `,
         })
         .expect(200);
 
@@ -262,13 +262,13 @@ describe('Todo resolver', () => {
               completed
             }
           }
-    `
+    `,
         })
         .expect(200);
 
       expect(res.body.errors).toHaveLength(1);
       expect(res.body.errors[0].message).toMatchInlineSnapshot(
-        `"Access denied! You need to be authorized to perform this action!"`
+        `"Access denied! You need to be authorized to perform this action!"`,
       );
     });
   });

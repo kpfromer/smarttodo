@@ -13,7 +13,7 @@ export async function createConnection(): Promise<void> {
       await connect(config.get('db.uri'), {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        dbName: 'smarttodo'
+        dbName: 'smarttodo',
       });
       break;
     default: {
@@ -23,12 +23,12 @@ export async function createConnection(): Promise<void> {
       await connect(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        dbName: 'test'
+        dbName: 'test',
       });
 
       const user = await UserModel.create({
         email: 'email@example.com',
-        password: await bcrypt.hash('password', 8)
+        password: await bcrypt.hash('password', 8),
       });
 
       const defaultProject = await ProjectModel.create({
@@ -37,11 +37,11 @@ export async function createConnection(): Promise<void> {
         updated: new Date(),
         created: new Date(),
         todoIds: [],
-        userId: user.id
+        userId: user.id,
       });
 
       await user.updateOne({
-        $set: { defaultProject: mongoose.Types.ObjectId(defaultProject.id) }
+        $set: { defaultProject: mongoose.Types.ObjectId(defaultProject.id) },
       });
 
       const project = await ProjectModel.create({
@@ -50,7 +50,7 @@ export async function createConnection(): Promise<void> {
         updated: new Date(),
         created: new Date(),
         todoIds: [],
-        userId: user.id
+        userId: user.id,
       });
 
       const todo1 = await TodoModel.create({
@@ -60,7 +60,7 @@ export async function createConnection(): Promise<void> {
         updated: new Date(),
         created: new Date(),
         projectId: project.id,
-        userId: user.id
+        userId: user.id,
       });
 
       const todo2 = await TodoModel.create({
@@ -69,16 +69,13 @@ export async function createConnection(): Promise<void> {
         updated: new Date(),
         created: new Date(),
         projectId: project.id,
-        userId: user.id
+        userId: user.id,
       });
 
       await project.updateOne({
         $set: {
-          todoIds: [
-            mongoose.Types.ObjectId(todo1.id),
-            mongoose.Types.ObjectId(todo2.id)
-          ]
-        }
+          todoIds: [mongoose.Types.ObjectId(todo1.id), mongoose.Types.ObjectId(todo2.id)],
+        },
       });
     }
   }

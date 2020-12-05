@@ -1,6 +1,22 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "start": "lerna run --parallel start",
+    "clean": "lerna run clean",
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "format": "prettier --write .",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
+    "generate": "lerna run generate",
+    "build:frontend": "lerna run build --scope=@smarttodo/frontend",
+    "test:frontend": "lerna run test --scope=@smarttodo/frontend",
+    "test:backend": "lerna run test --scope=@smarttodo/backend",
+    "build:backend": "lerna run build --scope=@smarttodo/backend",
+    "heroku-postbuild": "yarn bootstrap && yarn build:backend"
+  },
+  "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "9.1.1",
     "@commitlint/config-conventional": "9.1.1",
@@ -19,20 +35,6 @@
     "prettier": "2.0.5",
     "typescript": "^3.9.7"
   },
-  "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "start": "lerna run --parallel start",
-    "clean": "lerna run clean",
-    "build": "lerna run build",
-    "test": "lerna run test",
-    "lint": "eslint --fix \"**/*.ts\"",
-    "generate": "lerna run generate",
-    "build:frontend": "lerna run build --scope=@smarttodo/frontend",
-    "test:frontend": "lerna run test --scope=@smarttodo/frontend",
-    "test:backend": "lerna run test --scope=@smarttodo/backend",
-    "build:backend": "lerna run build --scope=@smarttodo/backend",
-    "heroku-postbuild": "yarn bootstrap && yarn build:backend"
-  },
   "workspaces": [
     "packages/*"
   ],
@@ -41,6 +43,19 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "semi": true,
+    "singleQuote": true,
+    "printWidth": 100,
+    "proseWrap": "always",
+    "tabWidth": 2
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
@@ -48,16 +63,8 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  },
-  "dependencies": {}
+    "*.{js,jsx,ts,tsx,md,html,css}": "prettier --write",
+    "*.{js,jsx,ts,tsx}": "eslint --fix"
+  }
 }

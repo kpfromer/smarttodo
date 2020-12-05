@@ -17,13 +17,13 @@ export const config = convict<Config>({
     doc: 'The application environment.',
     format: ['production', 'development'],
     default: 'development',
-    env: 'NODE_ENV'
+    env: 'NODE_ENV',
   },
   port: {
     doc: 'The port to run the server on.',
     format: 'port',
     default: 4000,
-    env: 'PORT'
+    env: 'PORT',
   },
   db: {
     uri: {
@@ -31,8 +31,8 @@ export const config = convict<Config>({
       doc: 'The mongodb uri.',
       format: String,
       default: 'does-not-matter-for-dev',
-      env: 'MONGODB_URI'
-    }
+      env: 'MONGODB_URI',
+    },
   },
   jwt: {
     refresh: {
@@ -41,14 +41,14 @@ export const config = convict<Config>({
         format: String,
         default: 'refresh-secret',
         sensitive: true,
-        env: 'REFRESH_JWT_SECRET'
+        env: 'REFRESH_JWT_SECRET',
       },
       duration: {
         doc: 'How long the access token lasts for.',
         format: String,
         default: '7d',
-        env: 'REFRESH_JWT_DURATION'
-      }
+        env: 'REFRESH_JWT_DURATION',
+      },
     },
     access: {
       secret: {
@@ -56,14 +56,14 @@ export const config = convict<Config>({
         format: String,
         default: 'access-secret',
         sensitive: true,
-        env: 'ACCESS_JWT_SECRET'
+        env: 'ACCESS_JWT_SECRET',
       },
       duration: {
         doc: 'How long the access token lasts for.',
         format: String,
         default: '15m',
-        env: 'ACCESS_JWT_DURATION'
-      }
-    }
-  }
+        env: 'ACCESS_JWT_DURATION',
+      },
+    },
+  },
 });

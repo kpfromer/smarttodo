@@ -1,10 +1,7 @@
 import React from 'react';
 import { graphql } from 'msw';
 import { setupServer } from 'msw/node';
-import {
-  RegisterMutation,
-  RegisterMutationVariables
-} from '../../generated/types-and-hooks';
+import { RegisterMutation, RegisterMutationVariables } from '../../generated/types-and-hooks';
 import { render, screen, waitFor } from '../../utils/test/apollo_render';
 import userEvent from '@testing-library/user-event';
 import * as gatsby from 'gatsby';
@@ -23,16 +20,11 @@ describe('Register page', () => {
       return res(
         ctx.data({
           __typename: 'Mutation',
-          createUser: accessToken
-        } as RegisterMutation)
+          createUser: accessToken,
+        } as RegisterMutation),
       );
     });
-    server.use(
-      graphql.mutation<RegisterMutation, RegisterMutationVariables>(
-        'register',
-        register
-      )
-    );
+    server.use(graphql.mutation<RegisterMutation, RegisterMutationVariables>('register', register));
 
     render(<Register />);
 
@@ -47,7 +39,7 @@ describe('Register page', () => {
     const registerBody = register.mock.calls[0][0].body;
     expect(registerBody.variables).toEqual({
       email: 'example@email.com',
-      password: 'password123'
+      password: 'password123',
     });
   });
   it('does not submit if matching password does not match', async () => {
@@ -56,16 +48,11 @@ describe('Register page', () => {
       return res(
         ctx.data({
           __typename: 'Mutation',
-          createUser: accessToken
-        } as RegisterMutation)
+          createUser: accessToken,
+        } as RegisterMutation),
       );
     });
-    server.use(
-      graphql.mutation<RegisterMutation, RegisterMutationVariables>(
-        'register',
-        register
-      )
-    );
+    server.use(graphql.mutation<RegisterMutation, RegisterMutationVariables>('register', register));
 
     render(<Register />);
 
@@ -74,9 +61,7 @@ describe('Register page', () => {
     userEvent.type(screen.getByLabelText(/confirm password/i), 'different');
     userEvent.click(screen.getByRole('button'));
 
-    expect(
-      await screen.findByText('Passwords must match!')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Passwords must match!')).toBeInTheDocument();
     expect(register).not.toHaveBeenCalled();
     expect(register).not.toHaveBeenCalled();
   });

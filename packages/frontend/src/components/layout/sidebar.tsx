@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, BoxProps, Flex } from 'rebass';
 
 const SidebarContext = React.createContext({
-  size: 300
+  size: 300,
 });
 
 export const SidebarContainer: React.FC<
@@ -10,16 +10,16 @@ export const SidebarContainer: React.FC<
 > = ({ size = 300, children, ...rest }) => {
   return (
     <Flex {...rest} sx={{ position: 'relative', ...rest.sx }}>
-      <SidebarContext.Provider value={{ size }}>
-        {children}
-      </SidebarContext.Provider>
+      <SidebarContext.Provider value={{ size }}>{children}</SidebarContext.Provider>
     </Flex>
   );
 };
 
-export const Sidebar: React.FC<
-  { headerSize: number } & Omit<BoxProps, 'css'>
-> = ({ headerSize, children, ...rest }) => {
+export const Sidebar: React.FC<{ headerSize: number } & Omit<BoxProps, 'css'>> = ({
+  headerSize,
+  children,
+  ...rest
+}) => {
   return (
     <SidebarContext.Consumer>
       {({ size }) => (
@@ -31,7 +31,7 @@ export const Sidebar: React.FC<
             top: headerSize,
             left: 0,
             bottom: 0,
-            ...rest.sx
+            ...rest.sx,
           }}
         >
           {children}
@@ -41,10 +41,7 @@ export const Sidebar: React.FC<
   );
 };
 
-export const SidebarBody: React.FC<Omit<BoxProps, 'css'>> = ({
-  children,
-  ...rest
-}) => {
+export const SidebarBody: React.FC<Omit<BoxProps, 'css'>> = ({ children, ...rest }) => {
   return (
     <SidebarContext.Consumer>
       {({ size }) => (

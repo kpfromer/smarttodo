@@ -7,9 +7,7 @@ import { logout } from '../../utils/logout';
 export const Header: React.FC = () => {
   const { data } = useLoginTokenQuery();
   const loggedIn =
-    (typeof window !== 'undefined' &&
-      localStorage.getItem('loggedIn') === 'true') ||
-    !!data?.token;
+    (typeof window !== 'undefined' && localStorage.getItem('loggedIn') === 'true') || !!data?.token;
 
   return (
     <Box bg="primary" color="white">

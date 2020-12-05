@@ -37,23 +37,13 @@ const Login: React.FC = () => {
         {!!error && <Text color="red">{error.message}</Text>}
         <Box>
           <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            ref={register({ required: true })}
-          />
+          <Input id="email" name="email" type="email" ref={register({ required: true })} />
         </Box>
         {!!errors.email && <Text color="red">Email is required.</Text>}
 
         <Box mt={2}>
           <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            ref={register({ required: true })}
-          />
+          <Input id="password" name="password" type="password" ref={register({ required: true })} />
         </Box>
         {!!errors.password && <Text color="red">Password is required.</Text>}
 

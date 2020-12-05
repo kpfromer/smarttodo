@@ -5,7 +5,7 @@ import {
   HttpLink,
   ApolloLink,
   from,
-  fromPromise
+  fromPromise,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { token } from './cache';
@@ -14,7 +14,7 @@ import { RefreshDocument, RefreshMutation } from '../generated/types-and-hooks';
 const getAccessToken = async () => {
   try {
     const { data } = await client.mutate<RefreshMutation>({
-      mutation: RefreshDocument
+      mutation: RefreshDocument,
     });
     const accessToken = data!.refresh;
     // Set new access token
@@ -32,8 +32,7 @@ const refreshTokenLink = onError(({ forward, operation, graphQLErrors }) => {
   if (graphQLErrors) {
     for (const error of graphQLErrors) {
       if (
-        error.message ===
-          'Access denied! You need to be authorized to perform this action!' ||
+        error.message === 'Access denied! You need to be authorized to perform this action!' ||
         error.extensions?.code === 'UNAUTHENTICATED'
       ) {
         return (
@@ -53,8 +52,8 @@ const authLink = new ApolloLink((operation, forward) => {
       return {
         headers: {
           ...headers,
-          authorization: token()
-        }
+          authorization: token(),
+        },
       };
     }
     return { headers };
@@ -72,8 +71,8 @@ export const client = new ApolloClient({
           ? 'https://api.todo.kpfromer.com/graphql'
           : 'http://localhost:4000/graphql',
       fetch,
-      credentials: 'include'
-    })
+      credentials: 'include',
+    }),
   ]),
   cache: new InMemoryCache({
     typePolicies: {
@@ -82,10 +81,10 @@ export const client = new ApolloClient({
           token: {
             read() {
               return token();
-            }
-          }
-        }
-      }
-    }
-  })
+            },
+          },
+        },
+      },
+    },
+  }),
 });

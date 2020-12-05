@@ -1,9 +1,5 @@
 import { mongoose } from '@typegoose/typegoose';
-import {
-  AuthenticationError,
-  ForbiddenError,
-  UserInputError
-} from 'apollo-server-express';
+import { AuthenticationError, ForbiddenError, UserInputError } from 'apollo-server-express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import ms from 'ms';
@@ -16,25 +12,18 @@ import {
   Mutation,
   ObjectType,
   Query,
-  Resolver
+  Resolver,
 } from 'type-graphql';
 import { config } from '../config';
 import { ProjectModel } from '../model/Project';
 import { UserModel } from '../model/User';
 import { ContextType } from '../types';
 
-const createToken = async (
-  userId: string,
-  secret: string,
-  expiresIn: string
-): Promise<string> => {
+const createToken = async (userId: string, secret: string, expiresIn: string): Promise<string> => {
   return await jwt.sign({ id: userId }, secret, { expiresIn });
 };
 
-const isCorrectPassword = async (
-  unencrypted: string,
-  encrypted: string
-): Promise<boolean> => {
+const isCorrectPassword = async (unencrypted: string, encrypted: string): Promise<boolean> => {
   return await bcrypt.compare(unencrypted, encrypted);
 };
 
@@ -54,7 +43,7 @@ export class UserResolver {
   async createUser(
     @Arg('email') email: string,
     @Arg('password') unencryptedPassword: string,
-    @Ctx() ctx: ContextType
+    @Ctx() ctx: ContextType,
   ) {
     const alreadyExists = await UserModel.findOne({ email });
 
@@ -64,7 +53,7 @@ export class UserResolver {
 
     const user = await UserModel.create({
       email,
-      password: await bcrypt.hash(unencryptedPassword, 8)
+      password: await bcrypt.hash(unencryptedPassword, 8),
     });
 
     const defaultProject = await ProjectModel.create({
@@ -73,27 +62,27 @@ export class UserResolver {
       updated: new Date(),
       created: new Date(),
       todoIds: [],
-      userId: user.id
+      userId: user.id,
     });
 
     await user.updateOne({
-      $set: { defaultProject: mongoose.Types.ObjectId(defaultProject.id) }
+      $set: { defaultProject: mongoose.Types.ObjectId(defaultProject.id) },
     });
 
     const refreshToken = await createToken(
       user.id,
       config.get('jwt.access.secret'),
-      config.get('jwt.refresh.duration')
+      config.get('jwt.refresh.duration'),
     );
     const accessToken = await createToken(
       user.id,
       config.get('jwt.access.secret'),
-      config.get('jwt.refresh.duration')
+      config.get('jwt.refresh.duration'),
     );
 
     ctx.res.cookie('refresh-token', refreshToken, {
       maxAge: ms(config.get('jwt.refresh.duration') as string),
-      httpOnly: true
+      httpOnly: true,
     });
 
     return accessToken;
@@ -106,15 +95,14 @@ export class UserResolver {
       try {
         // TODO: check in redis database if this refreshtoken is still valid
         // (maybe by some id in the refresh token)
-        const data = jwt.verify(
-          ctx.refreshToken,
-          config.get('jwt.refresh.secret')
-        ) as { id: string };
+        const data = jwt.verify(ctx.refreshToken, config.get('jwt.refresh.secret')) as {
+          id: string;
+        };
 
         const accessToken = await createToken(
           data.id,
           config.get('jwt.access.secret'),
-          config.get('jwt.access.duration')
+          config.get('jwt.access.duration'),
         );
 
         return accessToken;
@@ -133,7 +121,7 @@ export class UserResolver {
     @Arg('rememberMe', { defaultValue: false }) rememberMe: boolean,
     @Arg('email') email: string,
     @Arg('password') password: string,
-    @Ctx() ctx: ContextType
+    @Ctx() ctx: ContextType,
   ) {
     const user = await UserModel.findOne({ email });
 
@@ -148,18 +136,18 @@ export class UserResolver {
     const accessToken = await createToken(
       user.id,
       config.get('jwt.access.secret'),
-      config.get('jwt.access.duration')
+      config.get('jwt.access.duration'),
     );
 
     if (rememberMe) {
       const refreshToken = await createToken(
         user.id,
         config.get('jwt.refresh.secret'),
-        config.get('jwt.refresh.duration')
+        config.get('jwt.refresh.duration'),
       );
       ctx.res.cookie('refresh-token', refreshToken, {
         maxAge: ms(config.get('jwt.refresh.duration') as string),
-        httpOnly: true
+        httpOnly: true,
       });
     }
 
