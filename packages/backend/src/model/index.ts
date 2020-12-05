@@ -1,14 +1,13 @@
-import { connect } from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { UserModel } from './User';
-import { config } from '../config';
+import { mongoose } from '@typegoose/typegoose';
 import bcrypt from 'bcryptjs';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import { connect } from 'mongoose';
+import { config } from '../config';
 import { ProjectModel } from './Project';
 import { TodoModel } from './Todo';
+import { UserModel } from './User';
 
 export async function createConnection(): Promise<void> {
-  const mongod = new MongoMemoryServer();
-
   switch (config.get('environment')) {
     case 'production':
       await connect(config.get('db.uri'), {
@@ -18,6 +17,8 @@ export async function createConnection(): Promise<void> {
       });
       break;
     default: {
+      const mongod = new MongoMemoryServer();
+
       const uri = await mongod.getUri();
       await connect(uri, {
         useNewUrlParser: true,
@@ -39,7 +40,9 @@ export async function createConnection(): Promise<void> {
         userId: user.id
       });
 
-      await user.updateOne({ $set: { defaultProject: defaultProject.id } });
+      await user.updateOne({
+        $set: { defaultProject: mongoose.Types.ObjectId(defaultProject.id) }
+      });
 
       const project = await ProjectModel.create({
         name: 'Stuff',
@@ -71,7 +74,10 @@ export async function createConnection(): Promise<void> {
 
       await project.updateOne({
         $set: {
-          todoIds: [todo1.id, todo2.id]
+          todoIds: [
+            mongoose.Types.ObjectId(todo1.id),
+            mongoose.Types.ObjectId(todo2.id)
+          ]
         }
       });
     }

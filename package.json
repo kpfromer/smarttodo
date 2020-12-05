@@ -33,6 +33,9 @@
     "build:backend": "lerna run build --scope=@smarttodo/backend",
     "heroku-postbuild": "yarn bootstrap && yarn build:backend"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"

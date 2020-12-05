@@ -1,26 +1,27 @@
-import {
-  Resolver,
-  Mutation,
-  ObjectType,
-  Field,
-  Arg,
-  ID,
-  Query,
-  Ctx,
-  Authorized
-} from 'type-graphql';
-import { UserModel } from '../model/User';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { mongoose } from '@typegoose/typegoose';
 import {
   AuthenticationError,
-  UserInputError,
-  ForbiddenError
+  ForbiddenError,
+  UserInputError
 } from 'apollo-server-express';
-import { ContextType } from '../types';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import ms from 'ms';
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Field,
+  ID,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver
+} from 'type-graphql';
 import { config } from '../config';
 import { ProjectModel } from '../model/Project';
-import ms from 'ms';
+import { UserModel } from '../model/User';
+import { ContextType } from '../types';
 
 const createToken = async (
   userId: string,
@@ -75,7 +76,9 @@ export class UserResolver {
       userId: user.id
     });
 
-    await user.updateOne({ $set: { defaultProject: defaultProject.id } });
+    await user.updateOne({
+      $set: { defaultProject: mongoose.Types.ObjectId(defaultProject.id) }
+    });
 
     const refreshToken = await createToken(
       user.id,

@@ -1,16 +1,17 @@
+import { mongoose } from '@typegoose/typegoose';
+import { UserInputError } from 'apollo-server-express';
 import {
-  Resolver,
-  Mutation,
   Arg,
-  Field,
-  InputType,
-  ID,
   Authorized,
-  Ctx
+  Ctx,
+  Field,
+  ID,
+  InputType,
+  Mutation,
+  Resolver
 } from 'type-graphql';
 import { ProjectModel } from '../model/Project';
 import { Todo, TodoModel } from '../model/Todo';
-import { UserInputError } from 'apollo-server-express';
 import { ContextType } from '../types';
 
 // const wait = async (time: number) =>
@@ -106,10 +107,10 @@ export class TodoResolver {
       // remove todo from projects that have it
       await ProjectModel.updateMany(
         {
-          todoIds: { $in: [todo?.id] }
+          todoIds: { $in: [mongoose.Types.ObjectId(todo?.id)] }
         },
         {
-          $pull: { todoIds: todo?.id }
+          $pull: { todoIds: mongoose.Types.ObjectId(todo?.id) }
         }
       );
 

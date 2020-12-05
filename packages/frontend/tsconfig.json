@@ -1,7 +1,12 @@
 {
   "extends": "../../tsconfig.json",
+  "include": ["src"],
   "compilerOptions": {
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "lib": ["esnext", "dom"],
+    "noFallthroughCasesInSwitch": true,
+    "rootDir": "src",
+    "tsBuildInfoFile": "../../.build-cache/frontend.tsbuildinfo"
   }
 }

@@ -1,14 +1,32 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "baseUrl": ".",
+    "paths": {
+      "@mono/*": ["packages/*/src"]
+    },
+    // Mono-repo compilerOptions
+    "composite": true,
     "declaration": true,
-    "noImplicitAny": true,
-    "strict": true,
-    "removeComments": true,
-    "sourceMap": false,
-    "lib": ["esnext", "dom"],
-    "esModuleInterop": true
+    "declarationMap": true,
+    "sourceMap": true,
+
+    // Build specific compilerOptions
+
+    // "target": "es6",
+    // "module": "es6",
+
+    // Important. Without this the compiler will complain it cannot find a referenced
+    // package during a build.
+    "moduleResolution": "node"
   },
-  "exclude": ["node_modules", "**/dist", "**/build", "**/*.spec.ts"]
+  "files": [],
+  "references": [
+    {
+      "path": "packages/backend/tsconfig.json"
+    },
+    {
+      "path": "packages/frontend/tsconfig.json"
+    }
+  ]
 }
