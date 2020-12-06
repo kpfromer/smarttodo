@@ -1,11 +1,11 @@
-import React from 'react';
-import { Layout } from '../components/layout/layout';
-import { Label, Input, Checkbox } from '@rebass/forms';
-import { Box, Text, Button } from 'rebass';
-import { useForm } from 'react-hook-form';
+import { Checkbox, Input, Label } from '@rebass/forms';
 import { navigate } from 'gatsby';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { Box, Button, Text } from 'rebass';
+import { Layout } from '../components/layout/layout';
 import { useLoginMutation } from '../generated/types-and-hooks';
-import { token } from '../store/cache';
+import { login } from '../utils/auth';
 
 interface Inputs {
   email: string;
@@ -16,17 +16,13 @@ interface Inputs {
 const Login: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<Inputs>();
 
-  const [login, { error }] = useLoginMutation({ errorPolicy: 'all' });
+  const [loginBackend, { error }] = useLoginMutation({ errorPolicy: 'all' });
 
   const onSubmit = async (details: Inputs) => {
-    const { data } = await login({ variables: details });
+    const { data } = await loginBackend({ variables: details });
     if (data) {
-      token(data?.login);
-      if (details.rememberMe) {
-        localStorage.setItem('loggedIn', 'true');
-      } else {
-        localStorage.setItem('loggedIn', 'false');
-      }
+      login(data.login, details.rememberMe);
+
       navigate('/app/');
     }
   };

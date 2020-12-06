@@ -1,28 +1,29 @@
-import fetch from 'cross-fetch';
 import {
   ApolloClient,
-  InMemoryCache,
-  HttpLink,
   ApolloLink,
   from,
   fromPromise,
+  HttpLink,
+  InMemoryCache,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { token } from './cache';
+import fetch from 'cross-fetch';
 import { RefreshDocument, RefreshMutation } from '../generated/types-and-hooks';
+import { accessToken } from '../store/cache';
+import { logout } from '../utils/auth';
 
 const getAccessToken = async () => {
   try {
     const { data } = await client.mutate<RefreshMutation>({
       mutation: RefreshDocument,
     });
-    const accessToken = data!.refresh;
+    const token = data!.refresh;
     // Set new access token
-    token(accessToken);
+    accessToken(token);
     return accessToken;
   } catch {
     // Invalid refresh token, remove token
-    token(undefined);
+    logout();
     // TODO: show message?
   }
   return;
@@ -48,11 +49,11 @@ const refreshTokenLink = onError(({ forward, operation, graphQLErrors }) => {
 
 const authLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers }: any) => {
-    if (token()) {
+    if (accessToken()) {
       return {
         headers: {
           ...headers,
-          authorization: token(),
+          authorization: accessToken(),
         },
       };
     }
@@ -74,17 +75,5 @@ export const client = new ApolloClient({
       credentials: 'include',
     }),
   ]),
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          token: {
-            read() {
-              return token();
-            },
-          },
-        },
-      },
-    },
-  }),
+  cache: new InMemoryCache(),
 });

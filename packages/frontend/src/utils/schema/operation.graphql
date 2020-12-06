@@ -1,9 +1,3 @@
-# Local
-
-query loginToken {
-  token @client
-}
-
 # Server
 
 ## Authentication

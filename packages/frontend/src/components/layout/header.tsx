@@ -1,13 +1,11 @@
 import React from 'react';
-import { Flex, Box, Heading } from 'rebass';
+import { Box, Flex, Heading } from 'rebass';
+import { logout } from '../../utils/auth';
+import { useIsLoggedIn } from '../../utils/hooks/use-is-logged-in';
 import { Link } from '../misc/link';
-import { useLoginTokenQuery } from '../../generated/types-and-hooks';
-import { logout } from '../../utils/logout';
 
 export const Header: React.FC = () => {
-  const { data } = useLoginTokenQuery();
-  const loggedIn =
-    (typeof window !== 'undefined' && localStorage.getItem('loggedIn') === 'true') || !!data?.token;
+  const loggedIn = useIsLoggedIn();
 
   return (
     <Box bg="primary" color="white">
@@ -22,7 +20,7 @@ export const Header: React.FC = () => {
               <Link variant="nav" to="/app/" mr={3}>
                 Todo
               </Link>
-              <Box variant="nav" onClick={logout}>
+              <Box variant="nav" onClick={logout} sx={{ cursor: 'pointer' }}>
                 Logout
               </Box>
             </>

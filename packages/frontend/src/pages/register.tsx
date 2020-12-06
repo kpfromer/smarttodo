@@ -1,11 +1,11 @@
-import React from 'react';
-import { Heading, Box, Button, Text } from 'rebass';
-import { useForm } from 'react-hook-form';
-import { useRegisterMutation } from '../generated/types-and-hooks';
-import { token } from '../store/cache';
+import { Input, Label } from '@rebass/forms';
 import { navigate } from 'gatsby';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { Box, Button, Heading, Text } from 'rebass';
 import { Layout } from '../components/layout/layout';
-import { Label, Input } from '@rebass/forms';
+import { useRegisterMutation } from '../generated/types-and-hooks';
+import { login } from '../utils/auth';
 
 interface Inputs {
   email: string;
@@ -30,8 +30,7 @@ const Register: React.FC = () => {
       variables: { email: details.email, password: details.password },
     });
     if (data) {
-      token(data.createUser);
-      localStorage.setItem('loggedIn', 'true');
+      login(data.createUser, true);
       navigate('/app/');
     }
   };

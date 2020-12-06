@@ -1,7 +1,6 @@
 overwrite: true
 schema:
   - 'http://localhost:4000/graphql'
-  - 'src/utils/schema/local.graphql'
 documents: 'src/utils/schema/operation.graphql'
 generates:
   src/generated/types-and-hooks.tsx:
