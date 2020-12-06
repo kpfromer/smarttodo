@@ -1,11 +1,18 @@
-import { createMockDatabase, createMockUser, MockMongooseReturn } from '../../test/utils';
-import jwt from 'jsonwebtoken';
 import { DocumentType } from '@typegoose/typegoose';
-import { User } from '../../model/User';
-import { config } from '../../config';
-import supertest from 'supertest';
-import { createApp } from '../../server/app';
+import jwt from 'jsonwebtoken';
 import setCookie from 'set-cookie-parser';
+import supertest from 'supertest';
+import { config } from '../../config';
+import { Project, ProjectModel } from '../../model/Project';
+import { Todo, TodoModel } from '../../model/Todo';
+import { User, UserModel } from '../../model/User';
+import { createApp } from '../../server/app';
+import {
+  createMockDatabase,
+  createMockProject,
+  createMockUser,
+  MockMongooseReturn,
+} from '../../test/utils';
 
 describe('User resolvers', () => {
   let mockMongoose: MockMongooseReturn;
@@ -167,6 +174,68 @@ describe('User resolvers', () => {
         maxAge: expect.any(Number),
         expires: expect.any(Date),
       });
+    });
+  });
+
+  describe('deleteUser', () => {
+    let accessToken: string;
+    let todo: DocumentType<Todo>;
+    let project: DocumentType<Project>;
+
+    beforeEach(async () => {
+      ({
+        project,
+        todos: [todo],
+      } = await createMockProject(
+        user.id,
+        {
+          name: 'New Project',
+          color: '#1244ff',
+        },
+        [
+          {
+            name: 'Existing todo',
+            description: 'WoooW',
+            completed: true,
+          },
+        ],
+      ));
+
+      // Login
+      const res = await request
+        .post('/graphql')
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .send({
+          query: `mutation { login(email: "example@email.com", password: "password123") }`,
+        });
+
+      accessToken = res.body.data.login;
+    });
+
+    it('deletes all user data', async () => {
+      expect.assertions(4);
+
+      const res = await request
+        .post('/graphql')
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('authorization', accessToken)
+        .send({
+          query: `
+          mutation {
+            deleteUser
+          }
+      `,
+        })
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(res.body.data.deleteUser).toBe(true);
+      // Deletes user data in database
+      expect(await UserModel.findById(user._id)).toBeNull();
+      expect(await ProjectModel.findById(project._id)).toBeNull();
+      expect(await TodoModel.findById(todo._id)).toBeNull();
     });
   });
 

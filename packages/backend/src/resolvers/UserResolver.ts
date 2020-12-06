@@ -16,6 +16,7 @@ import {
 } from 'type-graphql';
 import { config } from '../config';
 import { ProjectModel } from '../model/Project';
+import { TodoModel } from '../model/Todo';
 import { UserModel } from '../model/User';
 import { ContextType } from '../types';
 
@@ -152,6 +153,20 @@ export class UserResolver {
     }
 
     return accessToken;
+  }
+
+  @Authorized()
+  @Mutation(() => Boolean)
+  async deleteUser(@Ctx() ctx: ContextType): Promise<boolean> {
+    const user = await UserModel.findByIdAndDelete(mongoose.Types.ObjectId(ctx.me!.id));
+
+    if (!user) return false;
+
+    // Delete other user data
+    await ProjectModel.deleteMany({ userId: user._id });
+    await TodoModel.deleteMany({ userId: user._id });
+
+    return true;
   }
 
   @Mutation(() => Boolean)
