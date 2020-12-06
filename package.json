@@ -8,7 +8,7 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "format": "prettier --write .",
-    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
+    "lint": "eslint '**/*.{js,jsx,ts,tsx}' --fix",
     "generate": "lerna run generate",
     "build:frontend": "lerna run build --scope=@smarttodo/frontend",
     "test:frontend": "lerna run test --scope=@smarttodo/frontend",

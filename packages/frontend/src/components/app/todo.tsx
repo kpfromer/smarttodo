@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
 import { gql, Reference } from '@apollo/client';
-import { Heading, Text, Flex, Box, Button } from 'rebass';
-import { Divider, Label, Checkbox, useThemeUI } from 'theme-ui';
-import {
-  useGetAllProjectsAndTodosQuery,
-  useCreateTodoMutation,
-  useUpdateTodoMutation,
-  TodoFieldsFragment,
-  ProjectFieldsFragment,
-  useDeleteTodoMutation,
-} from '../../generated/types-and-hooks';
 import { Input } from '@rebass/forms';
-import { Dot } from '../misc/Dot';
-import { TodoModal } from './TodoModal';
-import { Header } from './header';
-import { Sidebar, SidebarBody, SidebarContainer } from '../layout/sidebar';
-import { useForm } from 'react-hook-form';
-import { FaTimes, FaBars, FaCog } from 'react-icons/fa';
-import { IconContext } from 'react-icons';
-import { useSpring, animated } from 'react-spring';
 import { lighten } from '@theme-ui/color';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { IconContext } from 'react-icons';
+import { FaBars, FaCog, FaTimes } from 'react-icons/fa';
+import { animated, useSpring } from 'react-spring';
+import { Box, Button, Flex, Heading, Text } from 'rebass';
+import { Checkbox, Divider, Label, useThemeUI } from 'theme-ui';
+import {
+  ProjectFieldsFragment,
+  TodoFieldsFragment,
+  useCreateTodoMutation,
+  useDeleteTodoMutation,
+  useGetAllProjectsAndTodosQuery,
+  useUpdateTodoMutation,
+} from '../../generated/types-and-hooks';
+import { Sidebar, SidebarBody, SidebarContainer } from '../layout/sidebar';
+import { Dot } from '../misc/Dot';
+import { Header } from './header';
+import { TodoModal } from './TodoModal';
 
 const AnimatedSidebarBody = animated(SidebarBody);
 
@@ -29,6 +29,7 @@ const TodoItem: React.FC<{
   onClick?: () => void;
 }> = ({ project, todo, onClick }) => {
   const { theme } = useThemeUI();
+  const [hover, setHover] = useState(false);
   const [updateTodo] = useUpdateTodoMutation();
   const [deleteTodo] = useDeleteTodoMutation({
     update(cache) {
@@ -47,14 +48,16 @@ const TodoItem: React.FC<{
   return (
     <Box>
       <Flex
-        sx={{
-          '& .showOnHover': {
-            visibility: 'hidden',
-          },
-          '&:hover .showOnHover': {
-            visibility: 'visible',
-          },
-        }}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        // sx={{
+        //   '& .showOnHover': {
+        //     visibility: 'hidden',
+        //   },
+        //   '&:hover .showOnHover': {
+        //     visibility: 'visible',
+        //   },
+        // }}
       >
         <Box>
           <Label>
@@ -78,6 +81,7 @@ const TodoItem: React.FC<{
                   },
                 })
               }
+              data-testid="todo-checkbox"
             />
           </Label>
         </Box>
@@ -85,9 +89,11 @@ const TodoItem: React.FC<{
           {todo.name}
         </Text>
         <Box
-          className="showOnHover"
+          sx={{ visibility: hover ? 'visible' : 'hidden' }}
+          // className="showOnHover"
           mr={1}
           onClick={() => deleteTodo({ variables: { todoId: todo.id } })}
+          data-testid="todo-delete"
         >
           <IconContext.Provider
             value={{

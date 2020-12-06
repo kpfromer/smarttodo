@@ -1,15 +1,30 @@
+import { graphql, useStaticQuery } from 'gatsby';
 import React from 'react';
-import { Link } from 'gatsby';
+import { Heading, Text } from 'rebass';
 import { Layout } from '../components/layout/layout';
+import { Banner } from '../components/misc/Banner';
 import SEO from '../components/misc/seo';
 
-export default () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <Link to="/page-2/">Go to page 2</Link> <br />
-    <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
-  </Layout>
-);
+export default () => {
+  const data = useStaticQuery(graphql`
+    {
+      banner: file(name: { eq: "code" }, extension: { eq: "jpg" }) {
+        childImageSharp {
+          fluid(quality: 90, maxWidth: 1920) {
+            ...GatsbyImageSharpFluid_withWebp
+          }
+        }
+      }
+    }
+  `);
+  return (
+    <Layout>
+      <SEO title="Home" />
+
+      <Banner overlayColor={false} image={{ fluid: data.banner.childImageSharp.fluid }} />
+      <Heading>Smarttodo</Heading>
+
+      <Text>What we are about.</Text>
+    </Layout>
+  );
+};
