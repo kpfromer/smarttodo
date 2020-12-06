@@ -45,3 +45,10 @@ jobs:
         run: yarn test
         env:
           CI: true
+
+      - name: Cypress E2E
+        uses: cypress-io/github-action@v2
+        with:
+          start: npx serve ./packages/frontend/public -p 8000
+          wait-on: http://localhost:8000
+          working-directory: packages/frontend

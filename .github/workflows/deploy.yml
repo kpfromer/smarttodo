@@ -37,12 +37,9 @@ jobs:
         env:
           # GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES: true
           NODE_ENV: production
-          CI: true
 
       - name: Test
         run: yarn test:frontend
-        env:
-          CI: true
 
       - name: Deploy Frontend
         run: npx surge packages/frontend/public --token ${{secrets.SURGE_TOKEN}}
@@ -78,9 +75,13 @@ jobs:
 
       - name: Test
         run: yarn test:backend
-        env:
-          # NODE_ENV: testing
-          CI: true
+
+      - name: Cypress E2E
+        uses: cypress-io/github-action@v2
+        with:
+          start: npx serve ./packages/frontend/public -p 8000
+          wait-on: http://localhost:8000
+          working-directory: packages/frontend
 
       - run: git config user.email "kpfromer2@gmail.com"
       - run: git config user.name "Kyle Pfromer"
